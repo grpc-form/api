@@ -185,10 +185,11 @@ func validateIf(inFields []*Field, outField *Field, validators []*Validator, sta
 		if v := validator.GetEqualText(); v != "" && v == inFields[index].GetInput().GetValue() {
 			outField.Status = status
 		}
-		if o := validator.GetEqualOption(); o != nil {
-			if o.GetIndex() == index {
-				outField.Status = status
-			}
+		if v := validator.GetEqualNumber(); v != 0 && v == inFields[index].GetRadioGroup().GetValue() {
+			outField.Status = status
+		}
+		if v := validator.GetEqualNumber(); v != 0 && v == inFields[index].GetSelect().GetValue() {
+			outField.Status = status
 		}
 		if v := validator.GetEqualNumber(); v != 0 && v == inFields[index].GetSlider().GetValue() {
 			outField.Status = status

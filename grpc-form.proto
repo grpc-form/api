@@ -66,10 +66,9 @@ message HiddenIf {
 message Validator {
     int64 index = 1;
     string equal_text = 2;
-    Option equal_option = 3;
-    int64 equal_number = 4;
-    int64 smaller_than_number = 5;
-    int64 greater_than_number = 6;
+    int64 equal_number = 3;
+    int64 smaller_than_number = 4;
+    int64 greater_than_number = 5;
 }
 
 message Input {

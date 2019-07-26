@@ -2226,10 +2226,9 @@ proto.grpcform.Validator.toObject = function(includeInstance, msg) {
   var f, obj = {
     index: jspb.Message.getFieldWithDefault(msg, 1, 0),
     equalText: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    equalOption: (f = msg.getEqualOption()) && proto.grpcform.Option.toObject(includeInstance, f),
-    equalNumber: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    smallerThanNumber: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    greaterThanNumber: jspb.Message.getFieldWithDefault(msg, 6, 0)
+    equalNumber: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    smallerThanNumber: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    greaterThanNumber: jspb.Message.getFieldWithDefault(msg, 5, 0)
   };
 
   if (includeInstance) {
@@ -2275,19 +2274,14 @@ proto.grpcform.Validator.deserializeBinaryFromReader = function(msg, reader) {
       msg.setEqualText(value);
       break;
     case 3:
-      var value = new proto.grpcform.Option;
-      reader.readMessage(value,proto.grpcform.Option.deserializeBinaryFromReader);
-      msg.setEqualOption(value);
-      break;
-    case 4:
       var value = /** @type {number} */ (reader.readInt64());
       msg.setEqualNumber(value);
       break;
-    case 5:
+    case 4:
       var value = /** @type {number} */ (reader.readInt64());
       msg.setSmallerThanNumber(value);
       break;
-    case 6:
+    case 5:
       var value = /** @type {number} */ (reader.readInt64());
       msg.setGreaterThanNumber(value);
       break;
@@ -2334,32 +2328,24 @@ proto.grpcform.Validator.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getEqualOption();
-  if (f != null) {
-    writer.writeMessage(
-      3,
-      f,
-      proto.grpcform.Option.serializeBinaryToWriter
-    );
-  }
   f = message.getEqualNumber();
   if (f !== 0) {
     writer.writeInt64(
-      4,
+      3,
       f
     );
   }
   f = message.getSmallerThanNumber();
   if (f !== 0) {
     writer.writeInt64(
-      5,
+      4,
       f
     );
   }
   f = message.getGreaterThanNumber();
   if (f !== 0) {
     writer.writeInt64(
-      6,
+      5,
       f
     );
   }
@@ -2397,80 +2383,47 @@ proto.grpcform.Validator.prototype.setEqualText = function(value) {
 
 
 /**
- * optional Option equal_option = 3;
- * @return {?proto.grpcform.Option}
- */
-proto.grpcform.Validator.prototype.getEqualOption = function() {
-  return /** @type{?proto.grpcform.Option} */ (
-    jspb.Message.getWrapperField(this, proto.grpcform.Option, 3));
-};
-
-
-/** @param {?proto.grpcform.Option|undefined} value */
-proto.grpcform.Validator.prototype.setEqualOption = function(value) {
-  jspb.Message.setWrapperField(this, 3, value);
-};
-
-
-/**
- * Clears the message field making it undefined.
- */
-proto.grpcform.Validator.prototype.clearEqualOption = function() {
-  this.setEqualOption(undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.grpcform.Validator.prototype.hasEqualOption = function() {
-  return jspb.Message.getField(this, 3) != null;
-};
-
-
-/**
- * optional int64 equal_number = 4;
+ * optional int64 equal_number = 3;
  * @return {number}
  */
 proto.grpcform.Validator.prototype.getEqualNumber = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
 /** @param {number} value */
 proto.grpcform.Validator.prototype.setEqualNumber = function(value) {
-  jspb.Message.setProto3IntField(this, 4, value);
+  jspb.Message.setProto3IntField(this, 3, value);
 };
 
 
 /**
- * optional int64 smaller_than_number = 5;
+ * optional int64 smaller_than_number = 4;
  * @return {number}
  */
 proto.grpcform.Validator.prototype.getSmallerThanNumber = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
 };
 
 
 /** @param {number} value */
 proto.grpcform.Validator.prototype.setSmallerThanNumber = function(value) {
-  jspb.Message.setProto3IntField(this, 5, value);
+  jspb.Message.setProto3IntField(this, 4, value);
 };
 
 
 /**
- * optional int64 greater_than_number = 6;
+ * optional int64 greater_than_number = 5;
  * @return {number}
  */
 proto.grpcform.Validator.prototype.getGreaterThanNumber = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
 };
 
 
 /** @param {number} value */
 proto.grpcform.Validator.prototype.setGreaterThanNumber = function(value) {
-  jspb.Message.setProto3IntField(this, 6, value);
+  jspb.Message.setProto3IntField(this, 5, value);
 };
 
 
