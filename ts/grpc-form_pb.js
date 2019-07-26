@@ -3062,7 +3062,7 @@ proto.grpcform.Select.prototype.toObject = function(opt_includeInstance) {
 proto.grpcform.Select.toObject = function(includeInstance, msg) {
   var f, obj = {
     value: (f = msg.getValue()) && proto.grpcform.Option.toObject(includeInstance, f),
-    placeholder: (f = msg.getPlaceholder()) && proto.grpcform.Option.toObject(includeInstance, f),
+    placeholder: jspb.Message.getFieldWithDefault(msg, 2, ""),
     optionsList: jspb.Message.toObjectList(msg.getOptionsList(),
     proto.grpcform.Option.toObject, includeInstance)
   };
@@ -3107,8 +3107,7 @@ proto.grpcform.Select.deserializeBinaryFromReader = function(msg, reader) {
       msg.setValue(value);
       break;
     case 2:
-      var value = new proto.grpcform.Option;
-      reader.readMessage(value,proto.grpcform.Option.deserializeBinaryFromReader);
+      var value = /** @type {string} */ (reader.readString());
       msg.setPlaceholder(value);
       break;
     case 3:
@@ -3154,11 +3153,10 @@ proto.grpcform.Select.serializeBinaryToWriter = function(message, writer) {
     );
   }
   f = message.getPlaceholder();
-  if (f != null) {
-    writer.writeMessage(
+  if (f.length > 0) {
+    writer.writeString(
       2,
-      f,
-      proto.grpcform.Option.serializeBinaryToWriter
+      f
     );
   }
   f = message.getOptionsList();
@@ -3206,35 +3204,17 @@ proto.grpcform.Select.prototype.hasValue = function() {
 
 
 /**
- * optional Option placeholder = 2;
- * @return {?proto.grpcform.Option}
+ * optional string placeholder = 2;
+ * @return {string}
  */
 proto.grpcform.Select.prototype.getPlaceholder = function() {
-  return /** @type{?proto.grpcform.Option} */ (
-    jspb.Message.getWrapperField(this, proto.grpcform.Option, 2));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
-/** @param {?proto.grpcform.Option|undefined} value */
+/** @param {string} value */
 proto.grpcform.Select.prototype.setPlaceholder = function(value) {
-  jspb.Message.setWrapperField(this, 2, value);
-};
-
-
-/**
- * Clears the message field making it undefined.
- */
-proto.grpcform.Select.prototype.clearPlaceholder = function() {
-  this.setPlaceholder(undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.grpcform.Select.prototype.hasPlaceholder = function() {
-  return jspb.Message.getField(this, 2) != null;
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 

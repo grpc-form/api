@@ -381,10 +381,8 @@ export class Select extends jspb.Message {
   getValue(): Option | undefined;
   setValue(value?: Option): void;
 
-  hasPlaceholder(): boolean;
-  clearPlaceholder(): void;
-  getPlaceholder(): Option | undefined;
-  setPlaceholder(value?: Option): void;
+  getPlaceholder(): string;
+  setPlaceholder(value: string): void;
 
   clearOptionsList(): void;
   getOptionsList(): Array<Option>;
@@ -404,7 +402,7 @@ export class Select extends jspb.Message {
 export namespace Select {
   export type AsObject = {
     value?: Option.AsObject,
-    placeholder?: Option.AsObject,
+    placeholder: string,
     optionsList: Array<Option.AsObject>,
   }
 }
