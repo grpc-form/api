@@ -18,9 +18,9 @@ func New() server {
 	return make(map[string]element)
 }
 
-func (s server) Add(form Form, send SendFunc) {
+func (s server) Add(form ModelFunc, send SendFunc) {
 	safe.Lock()
-	s[form.GetName()] = element{form: form, send: send}
+	s[form().GetName()] = element{form: form, send: send}
 	safe.Unlock()
 }
 
@@ -31,7 +31,7 @@ var (
 type server map[string]element
 
 type element struct {
-	form Form
+	form ModelFunc
 	send SendFunc
 }
 
@@ -52,8 +52,8 @@ func (s server) GetForm(ctx context.Context, req *GetFormRequest) (*Form, error)
 	safe.Lock()
 	defer safe.Unlock()
 	for _, e := range s {
-		if req.GetName() == e.form.GetName() {
-			out := e.form
+		if req.GetName() == e.form().GetName() {
+			out := e.form()
 			return &out, nil
 		}
 	}
@@ -65,8 +65,8 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
 	defer safe.Unlock()
 	var out Form
 	for _, e := range s {
-		if in.GetName() == e.form.GetName() {
-			out = e.form
+		if in.GetName() == e.form().GetName() {
+			out = e.form()
 			break
 		}
 	}
@@ -176,7 +176,7 @@ func (s server) SendForm(ctx context.Context, in *Form) (res *SendFormResponse, 
 	safe.Lock()
 	defer safe.Unlock()
 	for _, e := range s {
-		if in.GetName() == e.form.GetName() {
+		if in.GetName() == e.form().GetName() {
 			out, err := s.ValidateForm(ctx, in)
 			if err != nil {
 				return e.send(ctx, out)
