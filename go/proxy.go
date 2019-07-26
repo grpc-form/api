@@ -109,7 +109,7 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
 			if outField.GetStatus() == STATUS_ACTIVE && outRadioGroup.Value == nil {
 				continue
 			}
-			option := outRadioGroup.GetValue()
+			option := inRadioGroup.GetValue()
 			check := false
 			for _, o := range outRadioGroup.GetOptions() {
 				if o.GetIndex() == option.GetIndex() && o.GetValue() == option.GetValue() {
