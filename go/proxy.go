@@ -169,17 +169,11 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
 }
 
 func (s server) SendForm(ctx context.Context, in *Form) (res *SendFormResponse, err error) {
-	safe.Lock()
-	defer safe.Unlock()
-	for _, e := range s {
-		if in.GetName() == e.form.GetName() {
-			out, err := s.ValidateForm(ctx, in)
-			if err != nil {
-				return e.send(ctx, out)
-			}
-		}
+	out, err := s.ValidateForm(ctx, in)
+	if err != nil {
+		return s[out.GetName()].send(ctx, out)
 	}
-	return &SendFormResponse{}, nil
+	return &SendFormResponse{Form: out}, nil
 }
 
 func validateIf(inFields []*Field, outField *Field, validators []*Validator, status STATUS) {
