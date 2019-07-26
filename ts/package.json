@@ -1,6 +1,6 @@
 {
   "name": "grpc-form-ts",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "gRPC Form API",
   "repository": {
     "type": "git",

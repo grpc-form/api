@@ -48,28 +48,29 @@ func (s server) Start(host string) {
 	}
 }
 
-func (s server) GetForm(ctx context.Context, req *GetFormRequest) (out *Form, err error) {
+func (s server) GetForm(ctx context.Context, req *GetFormRequest) (*Form, error) {
 	safe.Lock()
 	defer safe.Unlock()
 	for _, e := range s {
 		if req.GetName() == e.form.GetName() {
-			out = &e.form
-			return out, nil
+			out := e.form
+			return &out, nil
 		}
 	}
 	return &Form{}, nil
 }
 
-func (s server) ValidateForm(ctx context.Context, in *Form) (out *Form, err error) {
+func (s server) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
 	safe.Lock()
 	defer safe.Unlock()
+	var out Form
 	for _, e := range s {
 		if in.GetName() == e.form.GetName() {
-			out = &e.form
+			out = e.form
 			break
 		}
 	}
-	if out == nil || in == nil || in.GetFields() == nil || out.GetFields() == nil || len(out.GetFields()) != len(in.GetFields()) {
+	if in == nil || in.GetFields() == nil || out.GetFields() == nil || len(out.GetFields()) != len(in.GetFields()) {
 		return &Form{}, nil
 	}
 	out.Valid = true
@@ -98,17 +99,17 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (out *Form, err erro
 			if min := outInput.GetMinLength(); int64(len(outInput.GetValue())) < min.GetValue() {
 				outField.Error = min.GetError()
 				out.Valid = false
-				return out, err
+				return &out, nil
 			}
 			if max := outInput.GetMaxLength(); int64(len(outInput.GetValue())) > max.GetValue() {
 				outField.Error = max.GetError()
 				out.Valid = false
-				return out, err
+				return &out, nil
 			}
 			if ok, err := regexp.MatchString(outInput.GetRegex().GetValue(), outInput.GetValue()); !ok || err != nil {
 				outField.Error = outInput.GetRegex().GetError()
 				out.Valid = false
-				return out, err
+				return &out, nil
 			}
 		}
 		if inRadioGroup := inField.GetRadioGroup(); hasStatus(outField.GetStatus(), STATUS_ACTIVE, STATUS_REQUIRED) && inRadioGroup != nil {
@@ -127,7 +128,7 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (out *Form, err erro
 			if !check {
 				outField.Error = "RadioGroup Option Error"
 				out.Valid = false
-				return out, err
+				return &out, nil
 			}
 		}
 		if inSelect := inField.GetSelect(); hasStatus(outField.GetStatus(), STATUS_ACTIVE, STATUS_REQUIRED) && inSelect != nil {
@@ -146,7 +147,7 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (out *Form, err erro
 			if !check {
 				outField.Error = "Select Option Error"
 				out.Valid = false
-				return out, err
+				return &out, nil
 			}
 		}
 		if inSlider := inField.GetSlider(); hasStatus(outField.GetStatus(), STATUS_ACTIVE, STATUS_REQUIRED) && inSlider != nil {
@@ -159,16 +160,16 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (out *Form, err erro
 			if int64(v) < outSlider.GetMin() {
 				outField.Error = "Slider Min Error"
 				out.Valid = false
-				return out, err
+				return &out, nil
 			}
 			if hasStatus(outField.GetStatus(), STATUS_ACTIVE, STATUS_REQUIRED) && int64(v) > outSlider.GetMax() {
 				outField.Error = "Slider Max Error"
 				out.Valid = false
-				return out, err
+				return &out, nil
 			}
 		}
 	}
-	return
+	return &out, nil
 }
 
 func (s server) SendForm(ctx context.Context, in *Form) (res *SendFormResponse, err error) {
