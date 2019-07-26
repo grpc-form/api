@@ -2,6 +2,7 @@ package grpcform
 
 import (
 	"context"
+	"log"
 	"net"
 	"regexp"
 	"sync"
@@ -49,6 +50,7 @@ func (s server) Start(host string) {
 }
 
 func (s server) GetForm(ctx context.Context, req *GetFormRequest) (*Form, error) {
+	log.Println(req.GetName(), req)
 	safe.Lock()
 	defer safe.Unlock()
 	for _, e := range s {
@@ -60,6 +62,7 @@ func (s server) GetForm(ctx context.Context, req *GetFormRequest) (*Form, error)
 }
 
 func (s server) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
+	log.Println(in.GetName(), in)
 	out, err := s.GetForm(ctx, &GetFormRequest{Name: in.GetName()})
 	if err != nil || in == nil || len(out.GetFields()) != len(in.GetFields()) {
 		return &Form{}, nil
@@ -169,7 +172,9 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
 }
 
 func (s server) SendForm(ctx context.Context, in *Form) (res *SendFormResponse, err error) {
+	log.Println(in.GetName(), in)
 	out, err := s.ValidateForm(ctx, in)
+	log.Println(out, err)
 	if err != nil {
 		return s[out.GetName()].send(ctx, out)
 	}
