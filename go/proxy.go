@@ -108,7 +108,7 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
 		}
 		if inRadioGroup := inField.GetRadioGroup(); hasStatus(outField.GetStatus(), STATUS_ACTIVE, STATUS_REQUIRED) && inRadioGroup != nil {
 			outRadioGroup := outField.GetRadioGroup()
-			outRadioGroup.Value = inRadioGroup.GetValue()
+			outRadioGroup.Value = getOption(inRadioGroup.GetValue(), outRadioGroup.GetOptions())
 			if outField.GetStatus() == STATUS_ACTIVE && outRadioGroup.Value == nil {
 				continue
 			}
@@ -127,7 +127,7 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
 		}
 		if inSelect := inField.GetSelect(); hasStatus(outField.GetStatus(), STATUS_ACTIVE, STATUS_REQUIRED) && inSelect != nil {
 			outSelect := outField.GetSelect()
-			outSelect.Value = inSelect.GetValue()
+			outSelect.Value = getOption(inSelect.GetValue(), outSelect.GetOptions())
 			if outField.GetStatus() == STATUS_ACTIVE && outSelect.Value == nil {
 				continue
 			}
@@ -214,4 +214,13 @@ func hasStatus(is STATUS, within ...STATUS) bool {
 		}
 	}
 	return false
+}
+
+func getOption(option *Option, options []*Option) *Option {
+	for _, o := range options {
+		if o.GetIndex() == option.GetIndex() && o.GetValue() == option.GetValue() {
+			return o
+		}
+	}
+	return nil
 }
