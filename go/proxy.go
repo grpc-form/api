@@ -33,6 +33,10 @@ type element struct {
 	send SendFunc
 }
 
+func (e element) GetForm() Form {
+	return e.form
+}
+
 func (s server) Start(host string) {
 	lis, err := net.Listen("tcp", host)
 	if err != nil {
@@ -51,7 +55,7 @@ func (s server) GetForm(ctx context.Context, req *GetFormRequest) (*Form, error)
 	defer safe.Unlock()
 	for _, e := range s {
 		if req.GetName() == e.form.GetName() {
-			out := Form(e.form)
+			out := e.GetForm()
 			return &out, nil
 		}
 	}
