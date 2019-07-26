@@ -108,14 +108,13 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
 		}
 		if inRadioGroup := inField.GetRadioGroup(); hasStatus(outField.GetStatus(), STATUS_ACTIVE, STATUS_REQUIRED) && inRadioGroup != nil {
 			outRadioGroup := outField.GetRadioGroup()
-			outRadioGroup.Value = getOption(inRadioGroup.GetValue(), outRadioGroup.GetOptions())
-			if outField.GetStatus() == STATUS_ACTIVE && outRadioGroup.Value == nil {
+			outRadioGroup.Value = inRadioGroup.GetValue()
+			if outField.GetStatus() == STATUS_ACTIVE && outRadioGroup.Value == 0 {
 				continue
 			}
-			option := inRadioGroup.GetValue()
 			check := false
 			for _, o := range outRadioGroup.GetOptions() {
-				if o.GetIndex() == option.GetIndex() && o.GetValue() == option.GetValue() {
+				if o.GetIndex() == inRadioGroup.GetValue() {
 					check = true
 				}
 			}
@@ -127,14 +126,13 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
 		}
 		if inSelect := inField.GetSelect(); hasStatus(outField.GetStatus(), STATUS_ACTIVE, STATUS_REQUIRED) && inSelect != nil {
 			outSelect := outField.GetSelect()
-			outSelect.Value = getOption(inSelect.GetValue(), outSelect.GetOptions())
-			if outField.GetStatus() == STATUS_ACTIVE && outSelect.Value == nil {
+			outSelect.Value = inSelect.GetValue()
+			if outField.GetStatus() == STATUS_ACTIVE && outSelect.Value == 0 {
 				continue
 			}
-			option := outSelect.GetValue()
 			check := false
 			for _, o := range outSelect.GetOptions() {
-				if o.GetIndex() == option.GetIndex() && o.GetValue() == option.GetValue() {
+				if o.GetIndex() == outSelect.GetValue() {
 					check = true
 				}
 			}
@@ -188,10 +186,7 @@ func validateIf(inFields []*Field, outField *Field, validators []*Validator, sta
 			outField.Status = status
 		}
 		if o := validator.GetEqualOption(); o != nil {
-			if value := inFields[index].GetRadioGroup().GetValue(); o.GetIndex() == value.GetIndex() && o.GetValue() == value.GetValue() {
-				outField.Status = status
-			}
-			if value := inFields[index].GetSelect().GetValue(); o.GetIndex() == value.GetIndex() && o.GetValue() == value.GetValue() {
+			if o.GetIndex() == index {
 				outField.Status = status
 			}
 		}
