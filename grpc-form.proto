@@ -1,0 +1,103 @@
+syntax = "proto3";
+package grpcform;
+option go_package = "grpcform";
+
+service FormService {
+    rpc GetForm(GetFormRequest) returns (Form) {}
+    rpc ValidateForm(Form) returns (Form) {}
+    rpc SendForm(Form) returns (SendFormResponse) {}
+}
+
+message GetFormRequest {
+    string name = 1;
+}
+
+message SendFormResponse {
+    Form form = 1;
+    bool succeed = 2;
+    string message = 3;
+}
+
+message Form {
+    string name = 1;
+    repeated Field fields = 2;
+    repeated Button buttons = 3;
+    bool valid = 4;
+}
+
+message Field {
+    string label = 1;
+    STATUS status = 2;
+    bool instant_validate = 3;
+    string error = 4;
+    Input input = 5;
+    RadioGroup radio_group = 6;
+    Select select = 7;
+    Slider slider = 8;
+}
+
+enum STATUS {
+    ACTIVE = 0;
+    REQUIRED = 1;
+    DISABLED = 2;
+    HIDDEN = 3;
+}
+
+message Input {
+    string value = 1;
+    string placeholder = 2;
+    repeated Option options = 3;
+    MinLength min_length = 4;
+    MaxLength max_length = 5;
+    Regex regex = 6;
+}
+
+message RadioGroup {
+    Option value = 1;
+    repeated Option options = 2;
+}
+
+message Select {
+    Option value = 1;
+    Option placeholder = 2;
+    repeated Option options = 3;
+}
+
+message Slider {
+    int64 value = 1;
+    int64 min = 2;
+    int64 max = 3;
+    int64 step = 4;
+}
+
+message Option {
+    int64 index = 1;
+    string value = 2;
+}
+
+message MinLength {
+    int64 value = 1;
+    string error = 2;
+}
+
+message MaxLength {
+    int64 value = 1;
+    string error = 2;
+}
+
+message Regex {
+    string value = 1;
+    string error = 2;
+}
+
+message Button {
+    string label = 1;
+    STATUS status = 2;
+    BUTTON_FUNC button_func = 3;
+}
+
+enum BUTTON_FUNC {
+    SEND = 0;
+    RESET = 1;
+    VALIDATE = 2;
+}
