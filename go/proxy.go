@@ -10,8 +10,6 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-type ModelFunc func() Form
-
 type SendFunc func(context.Context, *Form) (*SendFormResponse, error)
 
 func New() server {
@@ -53,7 +51,7 @@ func (s server) GetForm(ctx context.Context, req *GetFormRequest) (*Form, error)
 	defer safe.Unlock()
 	for _, e := range s {
 		if req.GetName() == e.form.GetName() {
-			out := e.form
+			out := Form(e.form)
 			return &out, nil
 		}
 	}
@@ -61,16 +59,8 @@ func (s server) GetForm(ctx context.Context, req *GetFormRequest) (*Form, error)
 }
 
 func (s server) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
-	safe.Lock()
-	defer safe.Unlock()
-	var out Form
-	for _, e := range s {
-		if in.GetName() == e.form.GetName() {
-			out = e.form
-			break
-		}
-	}
-	if in == nil || in.GetFields() == nil || out.GetFields() == nil || len(out.GetFields()) != len(in.GetFields()) {
+	out, err := s.GetForm(ctx, &GetFormRequest{Name: in.GetName()})
+	if err != nil || in == nil || len(out.GetFields()) != len(in.GetFields()) {
 		return &Form{}, nil
 	}
 	out.Valid = true
@@ -99,17 +89,17 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
 			if min := outInput.GetMinLength(); int64(len(outInput.GetValue())) < min.GetValue() {
 				outField.Error = min.GetError()
 				out.Valid = false
-				return &out, nil
+				return out, nil
 			}
 			if max := outInput.GetMaxLength(); int64(len(outInput.GetValue())) > max.GetValue() {
 				outField.Error = max.GetError()
 				out.Valid = false
-				return &out, nil
+				return out, nil
 			}
 			if ok, err := regexp.MatchString(outInput.GetRegex().GetValue(), outInput.GetValue()); !ok || err != nil {
 				outField.Error = outInput.GetRegex().GetError()
 				out.Valid = false
-				return &out, nil
+				return out, nil
 			}
 		}
 		if inRadioGroup := inField.GetRadioGroup(); hasStatus(outField.GetStatus(), STATUS_ACTIVE, STATUS_REQUIRED) && inRadioGroup != nil {
@@ -128,7 +118,7 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
 			if !check {
 				outField.Error = "RadioGroup Option Error"
 				out.Valid = false
-				return &out, nil
+				return out, nil
 			}
 		}
 		if inSelect := inField.GetSelect(); hasStatus(outField.GetStatus(), STATUS_ACTIVE, STATUS_REQUIRED) && inSelect != nil {
@@ -147,7 +137,7 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
 			if !check {
 				outField.Error = "Select Option Error"
 				out.Valid = false
-				return &out, nil
+				return out, nil
 			}
 		}
 		if inSlider := inField.GetSlider(); hasStatus(outField.GetStatus(), STATUS_ACTIVE, STATUS_REQUIRED) && inSlider != nil {
@@ -160,16 +150,21 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
 			if int64(v) < outSlider.GetMin() {
 				outField.Error = "Slider Min Error"
 				out.Valid = false
-				return &out, nil
+				return out, nil
 			}
 			if hasStatus(outField.GetStatus(), STATUS_ACTIVE, STATUS_REQUIRED) && int64(v) > outSlider.GetMax() {
 				outField.Error = "Slider Max Error"
 				out.Valid = false
-				return &out, nil
+				return out, nil
 			}
 		}
 	}
-	return &out, nil
+	if out.GetValid() {
+		for _, b := range out.GetButtons() {
+			b.Status = STATUS_ACTIVE
+		}
+	}
+	return out, nil
 }
 
 func (s server) SendForm(ctx context.Context, in *Form) (res *SendFormResponse, err error) {
