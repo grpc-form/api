@@ -10,15 +10,17 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
+type ModelFunc func() *Form
+
 type SendFunc func(context.Context, *Form) (*SendFormResponse, error)
 
 func New() server {
 	return make(map[string]element)
 }
 
-func (s server) Add(form Form, send SendFunc) {
+func (s server) Add(model ModelFunc, send SendFunc) {
 	safe.Lock()
-	s[form.GetName()] = element{form: form, send: send}
+	s[model().GetName()] = element{model: model, send: send}
 	safe.Unlock()
 }
 
@@ -29,12 +31,8 @@ var (
 type server map[string]element
 
 type element struct {
-	form Form
-	send SendFunc
-}
-
-func (e element) GetForm() Form {
-	return e.form
+	model ModelFunc
+	send  SendFunc
 }
 
 func (s server) Start(host string) {
@@ -54,9 +52,8 @@ func (s server) GetForm(ctx context.Context, req *GetFormRequest) (*Form, error)
 	safe.Lock()
 	defer safe.Unlock()
 	for _, e := range s {
-		if req.GetName() == e.form.GetName() {
-			out := e.GetForm()
-			return &out, nil
+		if req.GetName() == e.model().GetName() {
+			return e.model(), nil
 		}
 	}
 	return &Form{}, nil
