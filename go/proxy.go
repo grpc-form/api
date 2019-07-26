@@ -2,8 +2,12 @@ package grpcform
 
 import (
 	"context"
+	"net"
 	"regexp"
 	"sync"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 type SendFunc func(context.Context, *Form) (*SendFormResponse, error)
@@ -23,6 +27,19 @@ var (
 )
 
 type server map[*Form]SendFunc
+
+func (s server) Start(host string) {
+	lis, err := net.Listen("tcp", host)
+	if err != nil {
+		panic(err)
+	}
+	gs := grpc.NewServer()
+	RegisterFormServiceServer(gs, s)
+	reflection.Register(gs)
+	if err := gs.Serve(lis); err != nil {
+		panic(err)
+	}
+}
 
 func (s server) GetForm(ctx context.Context, req *GetFormRequest) (out *Form, err error) {
 	safe.Lock()
