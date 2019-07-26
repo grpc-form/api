@@ -28,12 +28,16 @@ message Form {
 message Field {
     string label = 1;
     STATUS status = 2;
-    bool instant_validate = 3;
-    string error = 4;
-    Input input = 5;
-    RadioGroup radio_group = 6;
-    Select select = 7;
-    Slider slider = 8;
+    ActiveIf activeIf = 3;
+    RequiredIf requiredIf = 4;
+    DisabledIf disabledIf = 5;
+    HiddenIf hiddenIf = 6;
+    bool instant_validate = 7;
+    string error = 8;
+    Input input = 9;
+    RadioGroup radio_group = 10;
+    Select select = 11;
+    Slider slider = 12;
 }
 
 enum STATUS {
@@ -41,6 +45,31 @@ enum STATUS {
     REQUIRED = 1;
     DISABLED = 2;
     HIDDEN = 3;
+}
+
+message ActiveIf {
+    repeated Validator validators = 1;
+}
+
+message RequiredIf {
+    repeated Validator validators = 1;
+}
+
+message DisabledIf {
+     repeated Validator validators = 1;
+}
+
+message HiddenIf {
+    repeated Validator validators = 1;
+}
+
+message Validator {
+    int64 index = 1;
+    string equal_text = 2;
+    Option equal_option = 3;
+    int64 equal_number = 4;
+    int64 smaller_than_number = 5;
+    int64 greater_than_number = 6;
 }
 
 message Input {
@@ -97,7 +126,7 @@ message Button {
 }
 
 enum BUTTON_FUNC {
-    SEND = 0;
+    VALIDATE = 0;
     RESET = 1;
-    VALIDATE = 2;
+    SEND = 2;
 }

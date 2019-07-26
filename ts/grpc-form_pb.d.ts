@@ -96,6 +96,26 @@ export class Field extends jspb.Message {
   getStatus(): STATUSMap[keyof STATUSMap];
   setStatus(value: STATUSMap[keyof STATUSMap]): void;
 
+  hasActiveif(): boolean;
+  clearActiveif(): void;
+  getActiveif(): ActiveIf | undefined;
+  setActiveif(value?: ActiveIf): void;
+
+  hasRequiredif(): boolean;
+  clearRequiredif(): void;
+  getRequiredif(): RequiredIf | undefined;
+  setRequiredif(value?: RequiredIf): void;
+
+  hasDisabledif(): boolean;
+  clearDisabledif(): void;
+  getDisabledif(): DisabledIf | undefined;
+  setDisabledif(value?: DisabledIf): void;
+
+  hasHiddenif(): boolean;
+  clearHiddenif(): void;
+  getHiddenif(): HiddenIf | undefined;
+  setHiddenif(value?: HiddenIf): void;
+
   getInstantValidate(): boolean;
   setInstantValidate(value: boolean): void;
 
@@ -136,12 +156,146 @@ export namespace Field {
   export type AsObject = {
     label: string,
     status: STATUSMap[keyof STATUSMap],
+    activeif?: ActiveIf.AsObject,
+    requiredif?: RequiredIf.AsObject,
+    disabledif?: DisabledIf.AsObject,
+    hiddenif?: HiddenIf.AsObject,
     instantValidate: boolean,
     error: string,
     input?: Input.AsObject,
     radioGroup?: RadioGroup.AsObject,
     select?: Select.AsObject,
     slider?: Slider.AsObject,
+  }
+}
+
+export class ActiveIf extends jspb.Message {
+  clearValidatorsList(): void;
+  getValidatorsList(): Array<Validator>;
+  setValidatorsList(value: Array<Validator>): void;
+  addValidators(value?: Validator, index?: number): Validator;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ActiveIf.AsObject;
+  static toObject(includeInstance: boolean, msg: ActiveIf): ActiveIf.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: ActiveIf, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ActiveIf;
+  static deserializeBinaryFromReader(message: ActiveIf, reader: jspb.BinaryReader): ActiveIf;
+}
+
+export namespace ActiveIf {
+  export type AsObject = {
+    validatorsList: Array<Validator.AsObject>,
+  }
+}
+
+export class RequiredIf extends jspb.Message {
+  clearValidatorsList(): void;
+  getValidatorsList(): Array<Validator>;
+  setValidatorsList(value: Array<Validator>): void;
+  addValidators(value?: Validator, index?: number): Validator;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): RequiredIf.AsObject;
+  static toObject(includeInstance: boolean, msg: RequiredIf): RequiredIf.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: RequiredIf, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): RequiredIf;
+  static deserializeBinaryFromReader(message: RequiredIf, reader: jspb.BinaryReader): RequiredIf;
+}
+
+export namespace RequiredIf {
+  export type AsObject = {
+    validatorsList: Array<Validator.AsObject>,
+  }
+}
+
+export class DisabledIf extends jspb.Message {
+  clearValidatorsList(): void;
+  getValidatorsList(): Array<Validator>;
+  setValidatorsList(value: Array<Validator>): void;
+  addValidators(value?: Validator, index?: number): Validator;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): DisabledIf.AsObject;
+  static toObject(includeInstance: boolean, msg: DisabledIf): DisabledIf.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: DisabledIf, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): DisabledIf;
+  static deserializeBinaryFromReader(message: DisabledIf, reader: jspb.BinaryReader): DisabledIf;
+}
+
+export namespace DisabledIf {
+  export type AsObject = {
+    validatorsList: Array<Validator.AsObject>,
+  }
+}
+
+export class HiddenIf extends jspb.Message {
+  clearValidatorsList(): void;
+  getValidatorsList(): Array<Validator>;
+  setValidatorsList(value: Array<Validator>): void;
+  addValidators(value?: Validator, index?: number): Validator;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): HiddenIf.AsObject;
+  static toObject(includeInstance: boolean, msg: HiddenIf): HiddenIf.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: HiddenIf, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): HiddenIf;
+  static deserializeBinaryFromReader(message: HiddenIf, reader: jspb.BinaryReader): HiddenIf;
+}
+
+export namespace HiddenIf {
+  export type AsObject = {
+    validatorsList: Array<Validator.AsObject>,
+  }
+}
+
+export class Validator extends jspb.Message {
+  getIndex(): number;
+  setIndex(value: number): void;
+
+  getEqualText(): string;
+  setEqualText(value: string): void;
+
+  hasEqualOption(): boolean;
+  clearEqualOption(): void;
+  getEqualOption(): Option | undefined;
+  setEqualOption(value?: Option): void;
+
+  getEqualNumber(): number;
+  setEqualNumber(value: number): void;
+
+  getSmallerThanNumber(): number;
+  setSmallerThanNumber(value: number): void;
+
+  getGreaterThanNumber(): number;
+  setGreaterThanNumber(value: number): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Validator.AsObject;
+  static toObject(includeInstance: boolean, msg: Validator): Validator.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Validator, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Validator;
+  static deserializeBinaryFromReader(message: Validator, reader: jspb.BinaryReader): Validator;
+}
+
+export namespace Validator {
+  export type AsObject = {
+    index: number,
+    equalText: string,
+    equalOption?: Option.AsObject,
+    equalNumber: number,
+    smallerThanNumber: number,
+    greaterThanNumber: number,
   }
 }
 
@@ -421,9 +575,9 @@ export interface STATUSMap {
 export const STATUS: STATUSMap;
 
 export interface BUTTON_FUNCMap {
-  SEND: 0;
+  VALIDATE: 0;
   RESET: 1;
-  VALIDATE: 2;
+  SEND: 2;
 }
 
 export const BUTTON_FUNC: BUTTON_FUNCMap;
