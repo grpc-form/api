@@ -10,15 +10,18 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
+type ModelFunc func() Form
+
 type SendFunc func(context.Context, *Form) (*SendFormResponse, error)
 
 func New() server {
-	return make(map[*Form]SendFunc)
+	return make(map[string]element)
 }
 
-func (s server) Add(form *Form, send SendFunc) {
+func (s server) Add(model ModelFunc, send SendFunc) {
 	safe.Lock()
-	s[form] = send
+	form := model()
+	s[form.GetName()] = element{model: model, send: send}
 	safe.Unlock()
 }
 
@@ -26,7 +29,12 @@ var (
 	safe sync.Mutex
 )
 
-type server map[*Form]SendFunc
+type server map[string]element
+
+type element struct {
+	model ModelFunc
+	send  SendFunc
+}
 
 func (s server) Start(host string) {
 	lis, err := net.Listen("tcp", host)
@@ -44,10 +52,11 @@ func (s server) Start(host string) {
 func (s server) GetForm(ctx context.Context, req *GetFormRequest) (out *Form, err error) {
 	safe.Lock()
 	defer safe.Unlock()
-	for form := range s {
+	for _, e := range s {
+		form := e.model()
 		if req.GetName() == form.GetName() {
-			out = form
-			return
+			out = &form
+			return out, nil
 		}
 	}
 	return &Form{}, nil
@@ -56,9 +65,10 @@ func (s server) GetForm(ctx context.Context, req *GetFormRequest) (out *Form, er
 func (s server) ValidateForm(ctx context.Context, in *Form) (out *Form, err error) {
 	safe.Lock()
 	defer safe.Unlock()
-	for form := range s {
+	for _, e := range s {
+		form := e.model()
 		if in.GetName() == form.GetName() {
-			out = form
+			out = &form
 			break
 		}
 	}
@@ -167,11 +177,12 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (out *Form, err erro
 func (s server) SendForm(ctx context.Context, in *Form) (res *SendFormResponse, err error) {
 	safe.Lock()
 	defer safe.Unlock()
-	for form, send := range s {
+	for _, e := range s {
+		form := e.model()
 		if in.GetName() == form.GetName() {
 			out, err := s.ValidateForm(ctx, in)
 			if err != nil {
-				return send(ctx, out)
+				return e.send(ctx, out)
 			}
 		}
 	}
