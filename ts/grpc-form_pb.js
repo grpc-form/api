@@ -2860,7 +2860,7 @@ proto.grpcform.RadioGroup.prototype.toObject = function(opt_includeInstance) {
  */
 proto.grpcform.RadioGroup.toObject = function(includeInstance, msg) {
   var f, obj = {
-    value: (f = msg.getValue()) && proto.grpcform.Option.toObject(includeInstance, f),
+    value: jspb.Message.getFieldWithDefault(msg, 1, 0),
     optionsList: jspb.Message.toObjectList(msg.getOptionsList(),
     proto.grpcform.Option.toObject, includeInstance)
   };
@@ -2900,8 +2900,7 @@ proto.grpcform.RadioGroup.deserializeBinaryFromReader = function(msg, reader) {
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.grpcform.Option;
-      reader.readMessage(value,proto.grpcform.Option.deserializeBinaryFromReader);
+      var value = /** @type {number} */ (reader.readInt64());
       msg.setValue(value);
       break;
     case 2:
@@ -2939,11 +2938,10 @@ proto.grpcform.RadioGroup.prototype.serializeBinary = function() {
 proto.grpcform.RadioGroup.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getValue();
-  if (f != null) {
-    writer.writeMessage(
+  if (f !== 0) {
+    writer.writeInt64(
       1,
-      f,
-      proto.grpcform.Option.serializeBinaryToWriter
+      f
     );
   }
   f = message.getOptionsList();
@@ -2958,35 +2956,17 @@ proto.grpcform.RadioGroup.serializeBinaryToWriter = function(message, writer) {
 
 
 /**
- * optional Option value = 1;
- * @return {?proto.grpcform.Option}
+ * optional int64 value = 1;
+ * @return {number}
  */
 proto.grpcform.RadioGroup.prototype.getValue = function() {
-  return /** @type{?proto.grpcform.Option} */ (
-    jspb.Message.getWrapperField(this, proto.grpcform.Option, 1));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
-/** @param {?proto.grpcform.Option|undefined} value */
+/** @param {number} value */
 proto.grpcform.RadioGroup.prototype.setValue = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
-};
-
-
-/**
- * Clears the message field making it undefined.
- */
-proto.grpcform.RadioGroup.prototype.clearValue = function() {
-  this.setValue(undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.grpcform.RadioGroup.prototype.hasValue = function() {
-  return jspb.Message.getField(this, 1) != null;
+  jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -3061,7 +3041,7 @@ proto.grpcform.Select.prototype.toObject = function(opt_includeInstance) {
  */
 proto.grpcform.Select.toObject = function(includeInstance, msg) {
   var f, obj = {
-    value: (f = msg.getValue()) && proto.grpcform.Option.toObject(includeInstance, f),
+    value: jspb.Message.getFieldWithDefault(msg, 1, 0),
     placeholder: jspb.Message.getFieldWithDefault(msg, 2, ""),
     optionsList: jspb.Message.toObjectList(msg.getOptionsList(),
     proto.grpcform.Option.toObject, includeInstance)
@@ -3102,8 +3082,7 @@ proto.grpcform.Select.deserializeBinaryFromReader = function(msg, reader) {
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.grpcform.Option;
-      reader.readMessage(value,proto.grpcform.Option.deserializeBinaryFromReader);
+      var value = /** @type {number} */ (reader.readInt64());
       msg.setValue(value);
       break;
     case 2:
@@ -3145,11 +3124,10 @@ proto.grpcform.Select.prototype.serializeBinary = function() {
 proto.grpcform.Select.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getValue();
-  if (f != null) {
-    writer.writeMessage(
+  if (f !== 0) {
+    writer.writeInt64(
       1,
-      f,
-      proto.grpcform.Option.serializeBinaryToWriter
+      f
     );
   }
   f = message.getPlaceholder();
@@ -3171,35 +3149,17 @@ proto.grpcform.Select.serializeBinaryToWriter = function(message, writer) {
 
 
 /**
- * optional Option value = 1;
- * @return {?proto.grpcform.Option}
+ * optional int64 value = 1;
+ * @return {number}
  */
 proto.grpcform.Select.prototype.getValue = function() {
-  return /** @type{?proto.grpcform.Option} */ (
-    jspb.Message.getWrapperField(this, proto.grpcform.Option, 1));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
-/** @param {?proto.grpcform.Option|undefined} value */
+/** @param {number} value */
 proto.grpcform.Select.prototype.setValue = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
-};
-
-
-/**
- * Clears the message field making it undefined.
- */
-proto.grpcform.Select.prototype.clearValue = function() {
-  this.setValue(undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.grpcform.Select.prototype.hasValue = function() {
-  return jspb.Message.getField(this, 1) != null;
+  jspb.Message.setProto3IntField(this, 1, value);
 };
 
 

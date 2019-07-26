@@ -348,10 +348,8 @@ export namespace Input {
 }
 
 export class RadioGroup extends jspb.Message {
-  hasValue(): boolean;
-  clearValue(): void;
-  getValue(): Option | undefined;
-  setValue(value?: Option): void;
+  getValue(): number;
+  setValue(value: number): void;
 
   clearOptionsList(): void;
   getOptionsList(): Array<Option>;
@@ -370,16 +368,14 @@ export class RadioGroup extends jspb.Message {
 
 export namespace RadioGroup {
   export type AsObject = {
-    value?: Option.AsObject,
+    value: number,
     optionsList: Array<Option.AsObject>,
   }
 }
 
 export class Select extends jspb.Message {
-  hasValue(): boolean;
-  clearValue(): void;
-  getValue(): Option | undefined;
-  setValue(value?: Option): void;
+  getValue(): number;
+  setValue(value: number): void;
 
   getPlaceholder(): string;
   setPlaceholder(value: string): void;
@@ -401,7 +397,7 @@ export class Select extends jspb.Message {
 
 export namespace Select {
   export type AsObject = {
-    value?: Option.AsObject,
+    value: number,
     placeholder: string,
     optionsList: Array<Option.AsObject>,
   }
