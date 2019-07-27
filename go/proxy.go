@@ -2,7 +2,6 @@ package grpcform
 
 import (
 	"context"
-	"fmt"
 	"net"
 	"regexp"
 	"sync"
@@ -37,7 +36,6 @@ type element struct {
 }
 
 func (s ProxyServer) Start(host string) error {
-	fmt.Println(1, "Start")
 	lis, err := net.Listen("tcp", host)
 	if err != nil {
 		return err
@@ -52,7 +50,6 @@ func (s ProxyServer) Start(host string) error {
 }
 
 func (s ProxyServer) GetForm(ctx context.Context, req *GetFormRequest) (*Form, error) {
-	fmt.Println(2, "GetForm")
 	safe.Lock()
 	defer safe.Unlock()
 	for _, e := range s {
@@ -64,7 +61,6 @@ func (s ProxyServer) GetForm(ctx context.Context, req *GetFormRequest) (*Form, e
 }
 
 func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
-	fmt.Println(3, "ValidateForm")
 	out, err := s.GetForm(ctx, &GetFormRequest{Name: in.GetName()})
 	if err != nil || in == nil || len(out.GetFields()) != len(in.GetFields()) {
 		return &Form{}, nil
@@ -168,12 +164,10 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (*Form, error) 
 			b.Status = STATUS_ACTIVE
 		}
 	}
-	fmt.Println(4, "Valid Form")
 	return out, nil
 }
 
 func (s ProxyServer) SendForm(ctx context.Context, in *Form) (res *SendFormResponse, err error) {
-	fmt.Println(5, "SendForm")
 	out, err := s.ValidateForm(ctx, in)
 	if err != nil {
 		return &SendFormResponse{Form: out}, nil
