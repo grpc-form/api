@@ -2,7 +2,7 @@ package grpcform
 
 import (
 	"context"
-	"log"
+	"fmt"
 	"net"
 	"regexp"
 	"sync"
@@ -15,11 +15,11 @@ type ModelFunc func() *Form
 
 type SendFunc func(context.Context, *Form) (*SendFormResponse, error)
 
-func New() server {
+func New() ProxyServer {
 	return make(map[string]element)
 }
 
-func (s server) Add(model ModelFunc, send SendFunc) {
+func (s ProxyServer) Add(model ModelFunc, send SendFunc) {
 	safe.Lock()
 	s[model().GetName()] = element{model: model, send: send}
 	safe.Unlock()
@@ -29,28 +29,30 @@ var (
 	safe sync.Mutex
 )
 
-type server map[string]element
+type ProxyServer map[string]element
 
 type element struct {
 	model ModelFunc
 	send  SendFunc
 }
 
-func (s server) Start(host string) {
+func (s ProxyServer) Start(host string) error {
+	fmt.Println(1, "Start")
 	lis, err := net.Listen("tcp", host)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	gs := grpc.NewServer()
 	RegisterFormServiceServer(gs, s)
 	reflection.Register(gs)
 	if err := gs.Serve(lis); err != nil {
-		panic(err)
+		return err
 	}
+	return nil
 }
 
-func (s server) GetForm(ctx context.Context, req *GetFormRequest) (*Form, error) {
-	log.Println(req.GetName(), req)
+func (s ProxyServer) GetForm(ctx context.Context, req *GetFormRequest) (*Form, error) {
+	fmt.Println(2, "GetForm")
 	safe.Lock()
 	defer safe.Unlock()
 	for _, e := range s {
@@ -61,8 +63,8 @@ func (s server) GetForm(ctx context.Context, req *GetFormRequest) (*Form, error)
 	return &Form{}, nil
 }
 
-func (s server) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
-	log.Println(in.GetName(), in)
+func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
+	fmt.Println(3, "ValidateForm")
 	out, err := s.GetForm(ctx, &GetFormRequest{Name: in.GetName()})
 	if err != nil || in == nil || len(out.GetFields()) != len(in.GetFields()) {
 		return &Form{}, nil
@@ -166,17 +168,17 @@ func (s server) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
 			b.Status = STATUS_ACTIVE
 		}
 	}
+	fmt.Println(4, "Valid Form")
 	return out, nil
 }
 
-func (s server) SendForm(ctx context.Context, in *Form) (res *SendFormResponse, err error) {
-	log.Println(in.GetName(), in)
+func (s ProxyServer) SendForm(ctx context.Context, in *Form) (res *SendFormResponse, err error) {
+	fmt.Println(5, "SendForm")
 	out, err := s.ValidateForm(ctx, in)
-	log.Println(out, err)
 	if err != nil {
-		return s[out.GetName()].send(ctx, out)
+		return &SendFormResponse{Form: out}, nil
 	}
-	return &SendFormResponse{Form: out}, nil
+	return s[out.GetName()].send(ctx, out)
 }
 
 func validateIf(inFields []*Field, outField *Field, validators []*Validator, status STATUS) {
@@ -210,13 +212,4 @@ func hasStatus(is STATUS, within ...STATUS) bool {
 		}
 	}
 	return false
-}
-
-func getOption(option *Option, options []*Option) *Option {
-	for _, o := range options {
-		if o.GetIndex() == option.GetIndex() && o.GetValue() == option.GetValue() {
-			return o
-		}
-	}
-	return nil
 }
