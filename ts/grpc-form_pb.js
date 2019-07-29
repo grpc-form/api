@@ -2092,13 +2092,13 @@ proto.grpcform.Validator.prototype.toObject = function(opt_includeInstance) {
 proto.grpcform.Validator.toObject = function(includeInstance, msg) {
   var f, obj = {
     index: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    equalText: jspb.Message.getFieldWithDefault(msg, 10, ""),
-    smallerThanLength: jspb.Message.getFieldWithDefault(msg, 11, 0),
-    greterThanLength: jspb.Message.getFieldWithDefault(msg, 12, 0),
-    equalNumber: jspb.Message.getFieldWithDefault(msg, 20, 0),
-    smallerThanNumber: jspb.Message.getFieldWithDefault(msg, 21, 0),
-    greaterThanNumber: jspb.Message.getFieldWithDefault(msg, 22, 0),
-    regex: jspb.Message.getFieldWithDefault(msg, 30, "")
+    textIsEqual: jspb.Message.getFieldWithDefault(msg, 10, ""),
+    lengthSmallerThan: jspb.Message.getFieldWithDefault(msg, 11, 0),
+    lengthGreaterThan: jspb.Message.getFieldWithDefault(msg, 12, 0),
+    numberIsEqual: jspb.Message.getFieldWithDefault(msg, 20, 0),
+    numberSmallerThan: jspb.Message.getFieldWithDefault(msg, 21, 0),
+    numberGreaterThan: jspb.Message.getFieldWithDefault(msg, 22, 0),
+    matchRegexPattern: jspb.Message.getFieldWithDefault(msg, 30, "")
   };
 
   if (includeInstance) {
@@ -2141,31 +2141,31 @@ proto.grpcform.Validator.deserializeBinaryFromReader = function(msg, reader) {
       break;
     case 10:
       var value = /** @type {string} */ (reader.readString());
-      msg.setEqualText(value);
+      msg.setTextIsEqual(value);
       break;
     case 11:
       var value = /** @type {number} */ (reader.readInt64());
-      msg.setSmallerThanLength(value);
+      msg.setLengthSmallerThan(value);
       break;
     case 12:
       var value = /** @type {number} */ (reader.readInt64());
-      msg.setGreterThanLength(value);
+      msg.setLengthGreaterThan(value);
       break;
     case 20:
       var value = /** @type {number} */ (reader.readInt64());
-      msg.setEqualNumber(value);
+      msg.setNumberIsEqual(value);
       break;
     case 21:
       var value = /** @type {number} */ (reader.readInt64());
-      msg.setSmallerThanNumber(value);
+      msg.setNumberSmallerThan(value);
       break;
     case 22:
       var value = /** @type {number} */ (reader.readInt64());
-      msg.setGreaterThanNumber(value);
+      msg.setNumberGreaterThan(value);
       break;
     case 30:
       var value = /** @type {string} */ (reader.readString());
-      msg.setRegex(value);
+      msg.setMatchRegexPattern(value);
       break;
     default:
       reader.skipField();
@@ -2203,49 +2203,49 @@ proto.grpcform.Validator.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getEqualText();
+  f = message.getTextIsEqual();
   if (f.length > 0) {
     writer.writeString(
       10,
       f
     );
   }
-  f = message.getSmallerThanLength();
+  f = message.getLengthSmallerThan();
   if (f !== 0) {
     writer.writeInt64(
       11,
       f
     );
   }
-  f = message.getGreterThanLength();
+  f = message.getLengthGreaterThan();
   if (f !== 0) {
     writer.writeInt64(
       12,
       f
     );
   }
-  f = message.getEqualNumber();
+  f = message.getNumberIsEqual();
   if (f !== 0) {
     writer.writeInt64(
       20,
       f
     );
   }
-  f = message.getSmallerThanNumber();
+  f = message.getNumberSmallerThan();
   if (f !== 0) {
     writer.writeInt64(
       21,
       f
     );
   }
-  f = message.getGreaterThanNumber();
+  f = message.getNumberGreaterThan();
   if (f !== 0) {
     writer.writeInt64(
       22,
       f
     );
   }
-  f = message.getRegex();
+  f = message.getMatchRegexPattern();
   if (f.length > 0) {
     writer.writeString(
       30,
@@ -2271,106 +2271,106 @@ proto.grpcform.Validator.prototype.setIndex = function(value) {
 
 
 /**
- * optional string equal_text = 10;
+ * optional string text_is_equal = 10;
  * @return {string}
  */
-proto.grpcform.Validator.prototype.getEqualText = function() {
+proto.grpcform.Validator.prototype.getTextIsEqual = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 10, ""));
 };
 
 
 /** @param {string} value */
-proto.grpcform.Validator.prototype.setEqualText = function(value) {
+proto.grpcform.Validator.prototype.setTextIsEqual = function(value) {
   jspb.Message.setProto3StringField(this, 10, value);
 };
 
 
 /**
- * optional int64 smaller_than_length = 11;
+ * optional int64 length_smaller_than = 11;
  * @return {number}
  */
-proto.grpcform.Validator.prototype.getSmallerThanLength = function() {
+proto.grpcform.Validator.prototype.getLengthSmallerThan = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 11, 0));
 };
 
 
 /** @param {number} value */
-proto.grpcform.Validator.prototype.setSmallerThanLength = function(value) {
+proto.grpcform.Validator.prototype.setLengthSmallerThan = function(value) {
   jspb.Message.setProto3IntField(this, 11, value);
 };
 
 
 /**
- * optional int64 greter_than_length = 12;
+ * optional int64 length_greater_than = 12;
  * @return {number}
  */
-proto.grpcform.Validator.prototype.getGreterThanLength = function() {
+proto.grpcform.Validator.prototype.getLengthGreaterThan = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 12, 0));
 };
 
 
 /** @param {number} value */
-proto.grpcform.Validator.prototype.setGreterThanLength = function(value) {
+proto.grpcform.Validator.prototype.setLengthGreaterThan = function(value) {
   jspb.Message.setProto3IntField(this, 12, value);
 };
 
 
 /**
- * optional int64 equal_number = 20;
+ * optional int64 number_is_equal = 20;
  * @return {number}
  */
-proto.grpcform.Validator.prototype.getEqualNumber = function() {
+proto.grpcform.Validator.prototype.getNumberIsEqual = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 20, 0));
 };
 
 
 /** @param {number} value */
-proto.grpcform.Validator.prototype.setEqualNumber = function(value) {
+proto.grpcform.Validator.prototype.setNumberIsEqual = function(value) {
   jspb.Message.setProto3IntField(this, 20, value);
 };
 
 
 /**
- * optional int64 smaller_than_number = 21;
+ * optional int64 number_smaller_than = 21;
  * @return {number}
  */
-proto.grpcform.Validator.prototype.getSmallerThanNumber = function() {
+proto.grpcform.Validator.prototype.getNumberSmallerThan = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 21, 0));
 };
 
 
 /** @param {number} value */
-proto.grpcform.Validator.prototype.setSmallerThanNumber = function(value) {
+proto.grpcform.Validator.prototype.setNumberSmallerThan = function(value) {
   jspb.Message.setProto3IntField(this, 21, value);
 };
 
 
 /**
- * optional int64 greater_than_number = 22;
+ * optional int64 number_greater_than = 22;
  * @return {number}
  */
-proto.grpcform.Validator.prototype.getGreaterThanNumber = function() {
+proto.grpcform.Validator.prototype.getNumberGreaterThan = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 22, 0));
 };
 
 
 /** @param {number} value */
-proto.grpcform.Validator.prototype.setGreaterThanNumber = function(value) {
+proto.grpcform.Validator.prototype.setNumberGreaterThan = function(value) {
   jspb.Message.setProto3IntField(this, 22, value);
 };
 
 
 /**
- * optional string regex = 30;
+ * optional string match_regex_pattern = 30;
  * @return {string}
  */
-proto.grpcform.Validator.prototype.getRegex = function() {
+proto.grpcform.Validator.prototype.getMatchRegexPattern = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 30, ""));
 };
 
 
 /** @param {string} value */
-proto.grpcform.Validator.prototype.setRegex = function(value) {
+proto.grpcform.Validator.prototype.setMatchRegexPattern = function(value) {
   jspb.Message.setProto3StringField(this, 30, value);
 };
 
@@ -3579,9 +3579,9 @@ proto.grpcform.ButtonStatus = {
  */
 proto.grpcform.ButtonFuncType = {
   BUTTON_FUNC_UNSPECIFIED: 0,
-  VALIDATE: 1,
-  RESET: 2,
-  SEND: 3
+  BUTTON_FUNC_VALIDATE: 1,
+  BUTTON_FUNC_RESET: 2,
+  BUTTON_FUNC_SEND: 3
 };
 
 goog.object.extend(exports, proto.grpcform);

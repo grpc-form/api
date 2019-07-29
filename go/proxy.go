@@ -78,19 +78,19 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (
 	for i, inField := range inFields {
 		outField := outFields[i]
 		if activeIf := outField.GetActiveIf(); activeIf != nil {
-			validate(inFields, outField, activeIf.GetValidators(),
+			checkValidator(inFields, outField, activeIf.GetValidators(),
 				FieldStatus_FIELD_STATUS_ACTIVE)
 		}
 		if requiredIf := outField.GetRequiredIf(); requiredIf != nil {
-			validate(inFields, outField, requiredIf.GetValidators(),
+			checkValidator(inFields, outField, requiredIf.GetValidators(),
 				FieldStatus_FIELD_STATUS_REQUIRED)
 		}
 		if disabledIf := outField.GetDisabledIf(); disabledIf != nil {
-			validate(inFields, outField, disabledIf.GetValidators(),
+			checkValidator(inFields, outField, disabledIf.GetValidators(),
 				FieldStatus_FIELD_STATUS_DISABLED)
 		}
 		if hiddenIf := outField.GetHiddenIf(); hiddenIf != nil {
-			validate(inFields, outField, hiddenIf.GetValidators(),
+			checkValidator(inFields, outField, hiddenIf.GetValidators(),
 				FieldStatus_FIELD_STATUS_HIDDEN)
 		}
 		if inTextField := inField.GetTextField(); hasStatus(outField.GetStatus(),
@@ -186,79 +186,77 @@ func (s ProxyServer) SendForm(ctx context.Context, in *Form) (
 	return s[out.GetName()].send(ctx, out)
 }
 
-func validate(inFields []*Field, outField *Field, validators []*Validator, status FieldStatus) {
+func checkValidator(inFields []*Field, outField *Field, validators []*Validator, status FieldStatus) {
 	for _, validator := range validators {
 		index := validator.GetIndex()
 		if textField := inFields[index].GetTextField(); textField != nil &&
-			!validTextField(textField, validator) {
+			checkValidatorOnTextField(textField, validator) {
 			outField.Status = status
-			return
+			break
 		}
 
 		if numericField := inFields[index].GetNumericField(); numericField != nil &&
-			!validNumericField(numericField, validator) {
+			checkValidatorOnNumericField(numericField, validator) {
 			outField.Status = status
-			return
+			break
 		}
 		if selectField := inFields[index].GetSelectField(); selectField != nil &&
-			!validSelectField(selectField, validator) {
+			checkValidatorOnSelectField(selectField, validator) {
 			outField.Status = status
-			return
+			break
 		}
 	}
 }
 
-func validTextField(textField *TextField, validator *Validator) bool {
-	if v := validator.GetEqualText(); v != "" && v == textField.GetValue() {
-		return false
+func checkValidatorOnTextField(textField *TextField, validator *Validator) bool {
+	if v := validator.GetTextIsEqual(); v != "" && textField.GetValue() == v {
+		return true
 	}
-	if v := validator.GetSmallerThanLength(); v != 0 && v > int64(len(textField.GetValue())) {
-		return false
+	if v := validator.GetLengthSmallerThan(); v != 0 && int64(len(textField.GetValue())) < v {
+		return true
 	}
-	if v := validator.GetGreterThanLength(); v != 0 && v < int64(len(textField.GetValue())) {
-		return false
+	if v := validator.GetLengthGreaterThan(); v != 0 && int64(len(textField.GetValue())) > v {
+		return true
 	}
-	if v := validator.GetRegex(); v != "" {
-		if ok, err := regexp.MatchString(v, textField.GetValue()); !ok || err != nil {
-			return false
+	if v := validator.GetMatchRegexPattern(); v != "" {
+		if ok, err := regexp.MatchString(v, textField.GetValue()); ok && err != nil {
+			return true
 		}
 	}
-	return true
+	return false
 }
 
-func validNumericField(numericField *NumericField, validator *Validator) bool {
-	if v := validator.GetEqualNumber(); v != 0 && v == numericField.GetValue() {
-		return false
+func checkValidatorOnNumericField(numericField *NumericField, validator *Validator) bool {
+	if v := validator.GetNumberIsEqual(); v != 0 && numericField.GetValue() == v {
+		return true
 	}
-	if v := validator.GetSmallerThanNumber(); v != 0 && v > numericField.GetValue() {
-		return false
+	if v := validator.GetNumberSmallerThan(); v != 0 && numericField.GetValue() < v {
+		return true
 	}
-	if v := validator.GetGreaterThanNumber(); v != 0 && v < numericField.GetValue() {
-		return false
+	if v := validator.GetNumberGreaterThan(); v != 0 && numericField.GetValue() > v {
+		return true
 	}
-	if v := validator.GetRegex(); v != "" {
-		if ok, err := regexp.MatchString(v, strconv.Itoa(int(numericField.GetValue()))); !ok ||
-			err != nil {
-			return false
+	if v := validator.GetMatchRegexPattern(); v != "" {
+		if ok, err := regexp.MatchString(v, strconv.Itoa(int(numericField.GetValue()))); ok && err != nil {
+			return true
 		}
 	}
-	return true
+	return false
 }
 
-func validSelectField(selectField *SelectField, validator *Validator) bool {
-	if text := validator.GetEqualText(); text != "" {
+func checkValidatorOnSelectField(selectField *SelectField, validator *Validator) bool {
+	if text := validator.GetTextIsEqual(); text != "" {
 		if getOption(selectField.GetIndex(), selectField.GetOptions()) != nil {
 			return true
 		}
-		return false
 	}
-	if regex := validator.GetRegex(); regex != "" {
+	if regex := validator.GetMatchRegexPattern(); regex != "" {
 		if ok, err := regexp.MatchString(regex, getOption(selectField.GetIndex(),
-			selectField.GetOptions()).GetValue()); !ok || err != nil {
-			return false
+			selectField.GetOptions()).GetValue()); ok && err != nil {
+			return true
 		}
 	}
-	return true
+	return false
 }
 
 func getOption(option int64, options []*Option) *Option {

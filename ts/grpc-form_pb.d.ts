@@ -255,26 +255,26 @@ export class Validator extends jspb.Message {
   getIndex(): number;
   setIndex(value: number): void;
 
-  getEqualText(): string;
-  setEqualText(value: string): void;
+  getTextIsEqual(): string;
+  setTextIsEqual(value: string): void;
 
-  getSmallerThanLength(): number;
-  setSmallerThanLength(value: number): void;
+  getLengthSmallerThan(): number;
+  setLengthSmallerThan(value: number): void;
 
-  getGreterThanLength(): number;
-  setGreterThanLength(value: number): void;
+  getLengthGreaterThan(): number;
+  setLengthGreaterThan(value: number): void;
 
-  getEqualNumber(): number;
-  setEqualNumber(value: number): void;
+  getNumberIsEqual(): number;
+  setNumberIsEqual(value: number): void;
 
-  getSmallerThanNumber(): number;
-  setSmallerThanNumber(value: number): void;
+  getNumberSmallerThan(): number;
+  setNumberSmallerThan(value: number): void;
 
-  getGreaterThanNumber(): number;
-  setGreaterThanNumber(value: number): void;
+  getNumberGreaterThan(): number;
+  setNumberGreaterThan(value: number): void;
 
-  getRegex(): string;
-  setRegex(value: string): void;
+  getMatchRegexPattern(): string;
+  setMatchRegexPattern(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Validator.AsObject;
@@ -289,13 +289,13 @@ export class Validator extends jspb.Message {
 export namespace Validator {
   export type AsObject = {
     index: number,
-    equalText: string,
-    smallerThanLength: number,
-    greterThanLength: number,
-    equalNumber: number,
-    smallerThanNumber: number,
-    greaterThanNumber: number,
-    regex: string,
+    textIsEqual: string,
+    lengthSmallerThan: number,
+    lengthGreaterThan: number,
+    numberIsEqual: number,
+    numberSmallerThan: number,
+    numberGreaterThan: number,
+    matchRegexPattern: string,
   }
 }
 
@@ -504,9 +504,9 @@ export const ButtonStatus: ButtonStatusMap;
 
 export interface ButtonFuncTypeMap {
   BUTTON_FUNC_UNSPECIFIED: 0;
-  VALIDATE: 1;
-  RESET: 2;
-  SEND: 3;
+  BUTTON_FUNC_VALIDATE: 1;
+  BUTTON_FUNC_RESET: 2;
+  BUTTON_FUNC_SEND: 3;
 }
 
 export const ButtonFuncType: ButtonFuncTypeMap;
