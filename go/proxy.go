@@ -90,7 +90,7 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (*Form, error) 
 		if inTextField := inField.GetTextField(); hasStatus(outField.GetStatus(), FieldStatus_FIELD_STATUS_ACTIVE, FieldStatus_FIELD_STATUS_REQUIRED) && inTextField != nil {
 			outTextField := outField.GetTextField()
 			outTextField.Value = inTextField.GetValue()
-			if outField.GetStatus() == FieldStatus_FIELD_STATUS_ACTIVE && outTextField.Value == "" {
+			if !out.Valid || (outField.GetStatus() == FieldStatus_FIELD_STATUS_ACTIVE && outTextField.Value == "") {
 				continue
 			}
 			if int64(len(outTextField.GetValue())) < outTextField.GetMin() {
@@ -103,7 +103,8 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (*Form, error) 
 				out.Valid = false
 				return out, nil
 			}
-			log.Println("Regex: Pattern: %v, Value: %v", outTextField.GetRegex(), outTextField.GetValue())
+			log.Printf("Regex: Pattern: %v, Value: %v\n", outTextField.GetRegex(), outTextField.GetValue())
+			log.Println(regexp.MatchString(outTextField.GetRegex(), outTextField.GetValue()))
 			if ok, err := regexp.MatchString(outTextField.GetRegex(), outTextField.GetValue()); !ok || err != nil {
 				log.Println("Regex: NOT OK:", err)
 				outField.Error = outTextField.GetRegexError()
