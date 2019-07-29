@@ -248,7 +248,7 @@ func validNumericField(numericField *NumericField, validator *Validator) bool {
 func validSelectField(selectField *SelectField, validator *Validator) bool {
 	if text := validator.GetEqualText(); text != "" {
 		if getOption(selectField.GetIndex(), selectField.GetOptions()) != nil {
-			return false
+			return true
 		}
 		return false
 	}
