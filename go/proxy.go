@@ -50,7 +50,10 @@ func (s ProxyServer) Start(host string) error {
 	return nil
 }
 
-func (s ProxyServer) GetForm(ctx context.Context, req *GetFormRequest) (*Form, error) {
+func (s ProxyServer) GetForm(ctx context.Context, req *GetFormRequest) (
+	*Form,
+	error,
+) {
 	safe.Lock()
 	defer safe.Unlock()
 	for _, e := range s {
@@ -61,7 +64,10 @@ func (s ProxyServer) GetForm(ctx context.Context, req *GetFormRequest) (*Form, e
 	return &Form{}, nil
 }
 
-func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (*Form, error) {
+func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (
+	*Form,
+	error,
+) {
 	out, err := s.GetForm(ctx, &GetFormRequest{Name: in.GetName()})
 	if err != nil || in == nil || len(out.GetFields()) != len(in.GetFields()) {
 		return &Form{}, nil
@@ -72,24 +78,30 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (*Form, error) 
 	for i, inField := range inFields {
 		outField := outFields[i]
 		if activeIf := outField.GetActiveIf(); activeIf != nil {
-			validate(inFields, outField, activeIf.GetValidators(), FieldStatus_FIELD_STATUS_ACTIVE)
+			validate(inFields, outField, activeIf.GetValidators(),
+				FieldStatus_FIELD_STATUS_ACTIVE)
 		}
 		if requiredIf := outField.GetRequiredIf(); requiredIf != nil {
-			validate(inFields, outField, requiredIf.GetValidators(), FieldStatus_FIELD_STATUS_REQUIRED)
+			validate(inFields, outField, requiredIf.GetValidators(),
+				FieldStatus_FIELD_STATUS_REQUIRED)
 		}
 		if disabledIf := outField.GetDisabledIf(); disabledIf != nil {
-			validate(inFields, outField, disabledIf.GetValidators(), FieldStatus_FIELD_STATUS_DISABLED)
+			validate(inFields, outField, disabledIf.GetValidators(),
+				FieldStatus_FIELD_STATUS_DISABLED)
 		}
 		if hiddenIf := outField.GetHiddenIf(); hiddenIf != nil {
-			validate(inFields, outField, hiddenIf.GetValidators(), FieldStatus_FIELD_STATUS_HIDDEN)
+			validate(inFields, outField, hiddenIf.GetValidators(),
+				FieldStatus_FIELD_STATUS_HIDDEN)
 		}
-		if outField.GetStatus() == FieldStatus_FIELD_STATUS_UNSPECIFIED {
-			continue
-		}
-		if inTextField := inField.GetTextField(); hasStatus(outField.GetStatus(), FieldStatus_FIELD_STATUS_ACTIVE, FieldStatus_FIELD_STATUS_REQUIRED) && inTextField != nil {
+		if inTextField := inField.GetTextField(); hasStatus(outField.GetStatus(),
+			FieldStatus_FIELD_STATUS_ACTIVE, FieldStatus_FIELD_STATUS_REQUIRED) &&
+			inTextField != nil {
 			outTextField := outField.GetTextField()
 			outTextField.Value = inTextField.GetValue()
-			if !out.Valid || (outField.GetStatus() == FieldStatus_FIELD_STATUS_ACTIVE && outTextField.Value == "") {
+			if !out.Valid ||
+				outField.GetStatus() == FieldStatus_FIELD_STATUS_UNSPECIFIED ||
+				(outField.GetStatus() == FieldStatus_FIELD_STATUS_ACTIVE &&
+					outTextField.Value == "") {
 				continue
 			}
 			if int64(len(outTextField.GetValue())) < outTextField.GetMin() {
@@ -100,15 +112,19 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (*Form, error) 
 				outField.Error = outTextField.GetMaxError()
 				out.Valid = false
 			}
-			if ok, err := regexp.MatchString(outTextField.GetRegex(), outTextField.GetValue()); !ok || err != nil {
+			if ok, err := regexp.MatchString(outTextField.GetRegex(),
+				outTextField.GetValue()); !ok || err != nil {
 				outField.Error = outTextField.GetRegexError()
 				out.Valid = false
 			}
 		}
-		if inSelectField := inField.GetSelectField(); hasStatus(outField.GetStatus(), FieldStatus_FIELD_STATUS_ACTIVE, FieldStatus_FIELD_STATUS_REQUIRED) && inSelectField != nil {
+		if inSelectField := inField.GetSelectField(); hasStatus(outField.GetStatus(),
+			FieldStatus_FIELD_STATUS_ACTIVE, FieldStatus_FIELD_STATUS_REQUIRED) &&
+			inSelectField != nil {
 			outSelectField := outField.GetSelectField()
 			outSelectField.Index = inSelectField.GetIndex()
-			if outField.GetStatus() == FieldStatus_FIELD_STATUS_ACTIVE && outSelectField.GetIndex() == 0 {
+			if !out.Valid || (outField.GetStatus() == FieldStatus_FIELD_STATUS_ACTIVE &&
+				outSelectField.GetIndex() == 0) {
 				continue
 			}
 			check := false
@@ -122,10 +138,13 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (*Form, error) 
 				out.Valid = false
 			}
 		}
-		if inNumericField := inField.GetNumericField(); hasStatus(outField.GetStatus(), FieldStatus_FIELD_STATUS_ACTIVE, FieldStatus_FIELD_STATUS_REQUIRED) && inNumericField != nil {
+		if inNumericField := inField.GetNumericField(); hasStatus(outField.GetStatus(),
+			FieldStatus_FIELD_STATUS_ACTIVE, FieldStatus_FIELD_STATUS_REQUIRED) &&
+			inNumericField != nil {
 			outSlider := outField.GetNumericField()
 			outSlider.Value = inNumericField.GetValue()
-			if outField.GetStatus() == FieldStatus_FIELD_STATUS_ACTIVE && outSlider.Value == 0 {
+			if !out.Valid || (outField.GetStatus() == FieldStatus_FIELD_STATUS_ACTIVE &&
+				outSlider.Value == 0) {
 				continue
 			}
 			v := outSlider.GetValue()
@@ -133,7 +152,9 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (*Form, error) 
 				outField.Error = outSlider.GetMinError()
 				out.Valid = false
 			}
-			if hasStatus(outField.GetStatus(), FieldStatus_FIELD_STATUS_ACTIVE, FieldStatus_FIELD_STATUS_REQUIRED) && int64(v) > outSlider.GetMax() {
+			if hasStatus(outField.GetStatus(),
+				FieldStatus_FIELD_STATUS_ACTIVE, FieldStatus_FIELD_STATUS_REQUIRED) &&
+				int64(v) > outSlider.GetMax() {
 				outField.Error = outSlider.GetMaxError()
 				out.Valid = false
 			}
@@ -147,7 +168,10 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (*Form, error) 
 	return out, nil
 }
 
-func (s ProxyServer) SendForm(ctx context.Context, in *Form) (res *SendFormResponse, err error) {
+func (s ProxyServer) SendForm(ctx context.Context, in *Form) (
+	res *SendFormResponse,
+	err error,
+) {
 	out, err := s.ValidateForm(ctx, in)
 	if err != nil {
 		return &SendFormResponse{Form: out}, nil
@@ -158,16 +182,19 @@ func (s ProxyServer) SendForm(ctx context.Context, in *Form) (res *SendFormRespo
 func validate(inFields []*Field, outField *Field, validators []*Validator, status FieldStatus) {
 	for _, validator := range validators {
 		index := validator.GetIndex()
-		if textField := inFields[index].GetTextField(); textField != nil && !validTextField(textField, validator) {
+		if textField := inFields[index].GetTextField(); textField != nil &&
+			!validTextField(textField, validator) {
 			outField.Status = status
 			return
 		}
 
-		if numericField := inFields[index].GetNumericField(); numericField != nil && !validNumericField(numericField, validator) {
+		if numericField := inFields[index].GetNumericField(); numericField != nil &&
+			!validNumericField(numericField, validator) {
 			outField.Status = status
 			return
 		}
-		if selectField := inFields[index].GetSelectField(); selectField != nil && !validSelectField(selectField, validator) {
+		if selectField := inFields[index].GetSelectField(); selectField != nil &&
+			!validSelectField(selectField, validator) {
 			outField.Status = status
 			return
 		}
@@ -203,7 +230,8 @@ func validNumericField(numericField *NumericField, validator *Validator) bool {
 		return false
 	}
 	if v := validator.GetRegex(); v != "" {
-		if ok, err := regexp.MatchString(v, strconv.Itoa(int(numericField.GetValue()))); !ok || err != nil {
+		if ok, err := regexp.MatchString(v, strconv.Itoa(int(numericField.GetValue()))); !ok ||
+			err != nil {
 			return false
 		}
 	}
@@ -218,7 +246,8 @@ func validSelectField(selectField *SelectField, validator *Validator) bool {
 		return false
 	}
 	if regex := validator.GetRegex(); regex != "" {
-		if ok, err := regexp.MatchString(regex, getOption(selectField.GetIndex(), selectField.GetOptions()).GetValue()); !ok || err != nil {
+		if ok, err := regexp.MatchString(regex, getOption(selectField.GetIndex(),
+			selectField.GetOptions()).GetValue()); !ok || err != nil {
 			return false
 		}
 	}

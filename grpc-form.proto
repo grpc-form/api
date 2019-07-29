@@ -71,8 +71,7 @@ message Validator {
     int64 equal_number = 20;
     int64 smaller_than_number = 21;
     int64 greater_than_number = 22;
-    Option equal_option = 30;
-    string regex = 40;
+    string regex = 30;
 }
 
 message TextField {

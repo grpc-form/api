@@ -2098,8 +2098,7 @@ proto.grpcform.Validator.toObject = function(includeInstance, msg) {
     equalNumber: jspb.Message.getFieldWithDefault(msg, 20, 0),
     smallerThanNumber: jspb.Message.getFieldWithDefault(msg, 21, 0),
     greaterThanNumber: jspb.Message.getFieldWithDefault(msg, 22, 0),
-    equalOption: (f = msg.getEqualOption()) && proto.grpcform.Option.toObject(includeInstance, f),
-    regex: jspb.Message.getFieldWithDefault(msg, 40, "")
+    regex: jspb.Message.getFieldWithDefault(msg, 30, "")
   };
 
   if (includeInstance) {
@@ -2165,11 +2164,6 @@ proto.grpcform.Validator.deserializeBinaryFromReader = function(msg, reader) {
       msg.setGreaterThanNumber(value);
       break;
     case 30:
-      var value = new proto.grpcform.Option;
-      reader.readMessage(value,proto.grpcform.Option.deserializeBinaryFromReader);
-      msg.setEqualOption(value);
-      break;
-    case 40:
       var value = /** @type {string} */ (reader.readString());
       msg.setRegex(value);
       break;
@@ -2251,18 +2245,10 @@ proto.grpcform.Validator.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getEqualOption();
-  if (f != null) {
-    writer.writeMessage(
-      30,
-      f,
-      proto.grpcform.Option.serializeBinaryToWriter
-    );
-  }
   f = message.getRegex();
   if (f.length > 0) {
     writer.writeString(
-      40,
+      30,
       f
     );
   }
@@ -2375,50 +2361,17 @@ proto.grpcform.Validator.prototype.setGreaterThanNumber = function(value) {
 
 
 /**
- * optional Option equal_option = 30;
- * @return {?proto.grpcform.Option}
- */
-proto.grpcform.Validator.prototype.getEqualOption = function() {
-  return /** @type{?proto.grpcform.Option} */ (
-    jspb.Message.getWrapperField(this, proto.grpcform.Option, 30));
-};
-
-
-/** @param {?proto.grpcform.Option|undefined} value */
-proto.grpcform.Validator.prototype.setEqualOption = function(value) {
-  jspb.Message.setWrapperField(this, 30, value);
-};
-
-
-/**
- * Clears the message field making it undefined.
- */
-proto.grpcform.Validator.prototype.clearEqualOption = function() {
-  this.setEqualOption(undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.grpcform.Validator.prototype.hasEqualOption = function() {
-  return jspb.Message.getField(this, 30) != null;
-};
-
-
-/**
- * optional string regex = 40;
+ * optional string regex = 30;
  * @return {string}
  */
 proto.grpcform.Validator.prototype.getRegex = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 40, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 30, ""));
 };
 
 
 /** @param {string} value */
 proto.grpcform.Validator.prototype.setRegex = function(value) {
-  jspb.Message.setProto3StringField(this, 40, value);
+  jspb.Message.setProto3StringField(this, 30, value);
 };
 
 

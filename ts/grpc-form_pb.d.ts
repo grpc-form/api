@@ -273,11 +273,6 @@ export class Validator extends jspb.Message {
   getGreaterThanNumber(): number;
   setGreaterThanNumber(value: number): void;
 
-  hasEqualOption(): boolean;
-  clearEqualOption(): void;
-  getEqualOption(): Option | undefined;
-  setEqualOption(value?: Option): void;
-
   getRegex(): string;
   setRegex(value: string): void;
 
@@ -300,7 +295,6 @@ export namespace Validator {
     equalNumber: number,
     smallerThanNumber: number,
     greaterThanNumber: number,
-    equalOption?: Option.AsObject,
     regex: string,
   }
 }
