@@ -14,8 +14,10 @@ var global = Function('return this')();
 goog.exportSymbol('proto.grpcform.ActiveIf', null, global);
 goog.exportSymbol('proto.grpcform.Button', null, global);
 goog.exportSymbol('proto.grpcform.ButtonFuncType', null, global);
+goog.exportSymbol('proto.grpcform.ButtonStatus', null, global);
 goog.exportSymbol('proto.grpcform.DisabledIf', null, global);
 goog.exportSymbol('proto.grpcform.Field', null, global);
+goog.exportSymbol('proto.grpcform.FieldStatus', null, global);
 goog.exportSymbol('proto.grpcform.Form', null, global);
 goog.exportSymbol('proto.grpcform.GetFormRequest', null, global);
 goog.exportSymbol('proto.grpcform.HiddenIf', null, global);
@@ -25,7 +27,6 @@ goog.exportSymbol('proto.grpcform.RequiredIf', null, global);
 goog.exportSymbol('proto.grpcform.SelectField', null, global);
 goog.exportSymbol('proto.grpcform.SelectType', null, global);
 goog.exportSymbol('proto.grpcform.SendFormResponse', null, global);
-goog.exportSymbol('proto.grpcform.Status', null, global);
 goog.exportSymbol('proto.grpcform.TextField', null, global);
 goog.exportSymbol('proto.grpcform.Validator', null, global);
 /**
@@ -989,7 +990,7 @@ proto.grpcform.Field.deserializeBinaryFromReader = function(msg, reader) {
       msg.setLabel(value);
       break;
     case 2:
-      var value = /** @type {!proto.grpcform.Status} */ (reader.readEnum());
+      var value = /** @type {!proto.grpcform.FieldStatus} */ (reader.readEnum());
       msg.setStatus(value);
       break;
     case 3:
@@ -1167,15 +1168,15 @@ proto.grpcform.Field.prototype.setLabel = function(value) {
 
 
 /**
- * optional Status status = 2;
- * @return {!proto.grpcform.Status}
+ * optional FieldStatus status = 2;
+ * @return {!proto.grpcform.FieldStatus}
  */
 proto.grpcform.Field.prototype.getStatus = function() {
-  return /** @type {!proto.grpcform.Status} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {!proto.grpcform.FieldStatus} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
-/** @param {!proto.grpcform.Status} value */
+/** @param {!proto.grpcform.FieldStatus} value */
 proto.grpcform.Field.prototype.setStatus = function(value) {
   jspb.Message.setProto3EnumField(this, 2, value);
 };
@@ -3505,7 +3506,7 @@ proto.grpcform.Button.deserializeBinaryFromReader = function(msg, reader) {
       msg.setLabel(value);
       break;
     case 2:
-      var value = /** @type {!proto.grpcform.Status} */ (reader.readEnum());
+      var value = /** @type {!proto.grpcform.ButtonStatus} */ (reader.readEnum());
       msg.setStatus(value);
       break;
     case 3:
@@ -3581,15 +3582,15 @@ proto.grpcform.Button.prototype.setLabel = function(value) {
 
 
 /**
- * optional Status status = 2;
- * @return {!proto.grpcform.Status}
+ * optional ButtonStatus status = 2;
+ * @return {!proto.grpcform.ButtonStatus}
  */
 proto.grpcform.Button.prototype.getStatus = function() {
-  return /** @type {!proto.grpcform.Status} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {!proto.grpcform.ButtonStatus} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
-/** @param {!proto.grpcform.Status} value */
+/** @param {!proto.grpcform.ButtonStatus} value */
 proto.grpcform.Button.prototype.setStatus = function(value) {
   jspb.Message.setProto3EnumField(this, 2, value);
 };
@@ -3613,12 +3614,12 @@ proto.grpcform.Button.prototype.setType = function(value) {
 /**
  * @enum {number}
  */
-proto.grpcform.Status = {
-  STATUS_UNSPECIFIED: 0,
-  ACTIVE: 1,
-  REQUIRED: 2,
-  DISABLED: 3,
-  HIDDEN: 4
+proto.grpcform.FieldStatus = {
+  FIELD_STATUS_UNSPECIFIED: 0,
+  FIELD_STATUS_ACTIVE: 1,
+  FIELD_STATUS_REQUIRED: 2,
+  FIELD_STATUS_DISABLED: 3,
+  FIELD_STATUS_HIDDEN: 4
 };
 
 /**
@@ -3626,8 +3627,18 @@ proto.grpcform.Status = {
  */
 proto.grpcform.SelectType = {
   SELECT_TYPE_UNSPECIFIED: 0,
-  SIMPLE: 1,
-  MULTI: 2
+  SELECT_TYPE_SIMPLE: 1,
+  SELECT_TYPE_MULTI: 2
+};
+
+/**
+ * @enum {number}
+ */
+proto.grpcform.ButtonStatus = {
+  BUTTON_STATUS_UNSPECIFIED: 0,
+  BUTTON_ACTIVE: 1,
+  BUTTON_DISABLED: 3,
+  BUTTON_HIDDEN: 4
 };
 
 /**

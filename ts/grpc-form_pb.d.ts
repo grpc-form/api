@@ -93,8 +93,8 @@ export class Field extends jspb.Message {
   getLabel(): string;
   setLabel(value: string): void;
 
-  getStatus(): StatusMap[keyof StatusMap];
-  setStatus(value: StatusMap[keyof StatusMap]): void;
+  getStatus(): FieldStatusMap[keyof FieldStatusMap];
+  setStatus(value: FieldStatusMap[keyof FieldStatusMap]): void;
 
   getInstantValidate(): boolean;
   setInstantValidate(value: boolean): void;
@@ -150,7 +150,7 @@ export class Field extends jspb.Message {
 export namespace Field {
   export type AsObject = {
     label: string,
-    status: StatusMap[keyof StatusMap],
+    status: FieldStatusMap[keyof FieldStatusMap],
     instantValidate: boolean,
     error: string,
     textField?: TextField.AsObject,
@@ -459,8 +459,8 @@ export class Button extends jspb.Message {
   getLabel(): string;
   setLabel(value: string): void;
 
-  getStatus(): StatusMap[keyof StatusMap];
-  setStatus(value: StatusMap[keyof StatusMap]): void;
+  getStatus(): ButtonStatusMap[keyof ButtonStatusMap];
+  setStatus(value: ButtonStatusMap[keyof ButtonStatusMap]): void;
 
   getType(): ButtonFuncTypeMap[keyof ButtonFuncTypeMap];
   setType(value: ButtonFuncTypeMap[keyof ButtonFuncTypeMap]): void;
@@ -478,28 +478,37 @@ export class Button extends jspb.Message {
 export namespace Button {
   export type AsObject = {
     label: string,
-    status: StatusMap[keyof StatusMap],
+    status: ButtonStatusMap[keyof ButtonStatusMap],
     type: ButtonFuncTypeMap[keyof ButtonFuncTypeMap],
   }
 }
 
-export interface StatusMap {
-  STATUS_UNSPECIFIED: 0;
-  ACTIVE: 1;
-  REQUIRED: 2;
-  DISABLED: 3;
-  HIDDEN: 4;
+export interface FieldStatusMap {
+  FIELD_STATUS_UNSPECIFIED: 0;
+  FIELD_STATUS_ACTIVE: 1;
+  FIELD_STATUS_REQUIRED: 2;
+  FIELD_STATUS_DISABLED: 3;
+  FIELD_STATUS_HIDDEN: 4;
 }
 
-export const Status: StatusMap;
+export const FieldStatus: FieldStatusMap;
 
 export interface SelectTypeMap {
   SELECT_TYPE_UNSPECIFIED: 0;
-  SIMPLE: 1;
-  MULTI: 2;
+  SELECT_TYPE_SIMPLE: 1;
+  SELECT_TYPE_MULTI: 2;
 }
 
 export const SelectType: SelectTypeMap;
+
+export interface ButtonStatusMap {
+  BUTTON_STATUS_UNSPECIFIED: 0;
+  BUTTON_ACTIVE: 1;
+  BUTTON_DISABLED: 3;
+  BUTTON_HIDDEN: 4;
+}
+
+export const ButtonStatus: ButtonStatusMap;
 
 export interface ButtonFuncTypeMap {
   BUTTON_FUNC_UNSPECIFIED: 0;
