@@ -22,63 +22,97 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-type STATUS int32
+type Status int32
 
 const (
-	STATUS_ACTIVE   STATUS = 0
-	STATUS_REQUIRED STATUS = 1
-	STATUS_DISABLED STATUS = 2
-	STATUS_HIDDEN   STATUS = 3
+	Status_STATUS_UNSPECIFIED Status = 0
+	Status_ACTIVE             Status = 1
+	Status_REQUIRED           Status = 2
+	Status_DISABLED           Status = 3
+	Status_HIDDEN             Status = 4
 )
 
-var STATUS_name = map[int32]string{
-	0: "ACTIVE",
-	1: "REQUIRED",
-	2: "DISABLED",
-	3: "HIDDEN",
+var Status_name = map[int32]string{
+	0: "STATUS_UNSPECIFIED",
+	1: "ACTIVE",
+	2: "REQUIRED",
+	3: "DISABLED",
+	4: "HIDDEN",
 }
 
-var STATUS_value = map[string]int32{
-	"ACTIVE":   0,
-	"REQUIRED": 1,
-	"DISABLED": 2,
-	"HIDDEN":   3,
+var Status_value = map[string]int32{
+	"STATUS_UNSPECIFIED": 0,
+	"ACTIVE":             1,
+	"REQUIRED":           2,
+	"DISABLED":           3,
+	"HIDDEN":             4,
 }
 
-func (x STATUS) String() string {
-	return proto.EnumName(STATUS_name, int32(x))
+func (x Status) String() string {
+	return proto.EnumName(Status_name, int32(x))
 }
 
-func (STATUS) EnumDescriptor() ([]byte, []int) {
+func (Status) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_875c494c6e4805a2, []int{0}
 }
 
-type BUTTON_FUNC int32
+type SelectType int32
 
 const (
-	BUTTON_FUNC_VALIDATE BUTTON_FUNC = 0
-	BUTTON_FUNC_RESET    BUTTON_FUNC = 1
-	BUTTON_FUNC_SEND     BUTTON_FUNC = 2
+	SelectType_SELECT_TYPE_UNSPECIFIED SelectType = 0
+	SelectType_SIMPLE                  SelectType = 1
+	SelectType_MULTI                   SelectType = 2
 )
 
-var BUTTON_FUNC_name = map[int32]string{
-	0: "VALIDATE",
-	1: "RESET",
-	2: "SEND",
+var SelectType_name = map[int32]string{
+	0: "SELECT_TYPE_UNSPECIFIED",
+	1: "SIMPLE",
+	2: "MULTI",
 }
 
-var BUTTON_FUNC_value = map[string]int32{
-	"VALIDATE": 0,
-	"RESET":    1,
-	"SEND":     2,
+var SelectType_value = map[string]int32{
+	"SELECT_TYPE_UNSPECIFIED": 0,
+	"SIMPLE":                  1,
+	"MULTI":                   2,
 }
 
-func (x BUTTON_FUNC) String() string {
-	return proto.EnumName(BUTTON_FUNC_name, int32(x))
+func (x SelectType) String() string {
+	return proto.EnumName(SelectType_name, int32(x))
 }
 
-func (BUTTON_FUNC) EnumDescriptor() ([]byte, []int) {
+func (SelectType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_875c494c6e4805a2, []int{1}
+}
+
+type ButtonFuncType int32
+
+const (
+	ButtonFuncType_BUTTON_FUNC_UNSPECIFIED ButtonFuncType = 0
+	ButtonFuncType_VALIDATE                ButtonFuncType = 1
+	ButtonFuncType_RESET                   ButtonFuncType = 2
+	ButtonFuncType_SEND                    ButtonFuncType = 3
+)
+
+var ButtonFuncType_name = map[int32]string{
+	0: "BUTTON_FUNC_UNSPECIFIED",
+	1: "VALIDATE",
+	2: "RESET",
+	3: "SEND",
+}
+
+var ButtonFuncType_value = map[string]int32{
+	"BUTTON_FUNC_UNSPECIFIED": 0,
+	"VALIDATE":                1,
+	"RESET":                   2,
+	"SEND":                    3,
+}
+
+func (x ButtonFuncType) String() string {
+	return proto.EnumName(ButtonFuncType_name, int32(x))
+}
+
+func (ButtonFuncType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_875c494c6e4805a2, []int{2}
 }
 
 type GetFormRequest struct {
@@ -239,21 +273,20 @@ func (m *Form) GetValid() bool {
 }
 
 type Field struct {
-	Label                string      `protobuf:"bytes,1,opt,name=label,proto3" json:"label,omitempty"`
-	Status               STATUS      `protobuf:"varint,2,opt,name=status,proto3,enum=grpcform.STATUS" json:"status,omitempty"`
-	ActiveIf             *ActiveIf   `protobuf:"bytes,3,opt,name=activeIf,proto3" json:"activeIf,omitempty"`
-	RequiredIf           *RequiredIf `protobuf:"bytes,4,opt,name=requiredIf,proto3" json:"requiredIf,omitempty"`
-	DisabledIf           *DisabledIf `protobuf:"bytes,5,opt,name=disabledIf,proto3" json:"disabledIf,omitempty"`
-	HiddenIf             *HiddenIf   `protobuf:"bytes,6,opt,name=hiddenIf,proto3" json:"hiddenIf,omitempty"`
-	InstantValidate      bool        `protobuf:"varint,7,opt,name=instant_validate,json=instantValidate,proto3" json:"instant_validate,omitempty"`
-	Error                string      `protobuf:"bytes,8,opt,name=error,proto3" json:"error,omitempty"`
-	Input                *Input      `protobuf:"bytes,9,opt,name=input,proto3" json:"input,omitempty"`
-	RadioGroup           *RadioGroup `protobuf:"bytes,10,opt,name=radio_group,json=radioGroup,proto3" json:"radio_group,omitempty"`
-	Select               *Select     `protobuf:"bytes,11,opt,name=select,proto3" json:"select,omitempty"`
-	Slider               *Slider     `protobuf:"bytes,12,opt,name=slider,proto3" json:"slider,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
-	XXX_unrecognized     []byte      `json:"-"`
-	XXX_sizecache        int32       `json:"-"`
+	Label                string        `protobuf:"bytes,1,opt,name=label,proto3" json:"label,omitempty"`
+	Status               Status        `protobuf:"varint,2,opt,name=status,proto3,enum=grpcform.Status" json:"status,omitempty"`
+	InstantValidate      bool          `protobuf:"varint,3,opt,name=instant_validate,json=instantValidate,proto3" json:"instant_validate,omitempty"`
+	Error                string        `protobuf:"bytes,4,opt,name=error,proto3" json:"error,omitempty"`
+	TextField            *TextField    `protobuf:"bytes,10,opt,name=text_field,json=textField,proto3" json:"text_field,omitempty"`
+	SelectField          *SelectField  `protobuf:"bytes,11,opt,name=select_field,json=selectField,proto3" json:"select_field,omitempty"`
+	NumericField         *NumericField `protobuf:"bytes,12,opt,name=numeric_field,json=numericField,proto3" json:"numeric_field,omitempty"`
+	ActiveIf             *ActiveIf     `protobuf:"bytes,20,opt,name=activeIf,proto3" json:"activeIf,omitempty"`
+	RequiredIf           *RequiredIf   `protobuf:"bytes,21,opt,name=required_if,json=requiredIf,proto3" json:"required_if,omitempty"`
+	DisabledIf           *DisabledIf   `protobuf:"bytes,22,opt,name=disabled_if,json=disabledIf,proto3" json:"disabled_if,omitempty"`
+	HiddenIf             *HiddenIf     `protobuf:"bytes,23,opt,name=hidden_if,json=hiddenIf,proto3" json:"hidden_if,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
 }
 
 func (m *Field) Reset()         { *m = Field{} }
@@ -288,11 +321,46 @@ func (m *Field) GetLabel() string {
 	return ""
 }
 
-func (m *Field) GetStatus() STATUS {
+func (m *Field) GetStatus() Status {
 	if m != nil {
 		return m.Status
 	}
-	return STATUS_ACTIVE
+	return Status_STATUS_UNSPECIFIED
+}
+
+func (m *Field) GetInstantValidate() bool {
+	if m != nil {
+		return m.InstantValidate
+	}
+	return false
+}
+
+func (m *Field) GetError() string {
+	if m != nil {
+		return m.Error
+	}
+	return ""
+}
+
+func (m *Field) GetTextField() *TextField {
+	if m != nil {
+		return m.TextField
+	}
+	return nil
+}
+
+func (m *Field) GetSelectField() *SelectField {
+	if m != nil {
+		return m.SelectField
+	}
+	return nil
+}
+
+func (m *Field) GetNumericField() *NumericField {
+	if m != nil {
+		return m.NumericField
+	}
+	return nil
 }
 
 func (m *Field) GetActiveIf() *ActiveIf {
@@ -319,48 +387,6 @@ func (m *Field) GetDisabledIf() *DisabledIf {
 func (m *Field) GetHiddenIf() *HiddenIf {
 	if m != nil {
 		return m.HiddenIf
-	}
-	return nil
-}
-
-func (m *Field) GetInstantValidate() bool {
-	if m != nil {
-		return m.InstantValidate
-	}
-	return false
-}
-
-func (m *Field) GetError() string {
-	if m != nil {
-		return m.Error
-	}
-	return ""
-}
-
-func (m *Field) GetInput() *Input {
-	if m != nil {
-		return m.Input
-	}
-	return nil
-}
-
-func (m *Field) GetRadioGroup() *RadioGroup {
-	if m != nil {
-		return m.RadioGroup
-	}
-	return nil
-}
-
-func (m *Field) GetSelect() *Select {
-	if m != nil {
-		return m.Select
-	}
-	return nil
-}
-
-func (m *Field) GetSlider() *Slider {
-	if m != nil {
-		return m.Slider
 	}
 	return nil
 }
@@ -523,10 +549,14 @@ func (m *HiddenIf) GetValidators() []*Validator {
 
 type Validator struct {
 	Index                int64    `protobuf:"varint,1,opt,name=index,proto3" json:"index,omitempty"`
-	EqualText            string   `protobuf:"bytes,2,opt,name=equal_text,json=equalText,proto3" json:"equal_text,omitempty"`
-	EqualNumber          int64    `protobuf:"varint,3,opt,name=equal_number,json=equalNumber,proto3" json:"equal_number,omitempty"`
-	SmallerThanNumber    int64    `protobuf:"varint,4,opt,name=smaller_than_number,json=smallerThanNumber,proto3" json:"smaller_than_number,omitempty"`
-	GreaterThanNumber    int64    `protobuf:"varint,5,opt,name=greater_than_number,json=greaterThanNumber,proto3" json:"greater_than_number,omitempty"`
+	EqualText            string   `protobuf:"bytes,10,opt,name=equal_text,json=equalText,proto3" json:"equal_text,omitempty"`
+	SmallerThanLength    int64    `protobuf:"varint,11,opt,name=smaller_than_length,json=smallerThanLength,proto3" json:"smaller_than_length,omitempty"`
+	GreterThanLength     int64    `protobuf:"varint,12,opt,name=greter_than_length,json=greterThanLength,proto3" json:"greter_than_length,omitempty"`
+	EqualNumber          int64    `protobuf:"varint,20,opt,name=equal_number,json=equalNumber,proto3" json:"equal_number,omitempty"`
+	SmallerThanNumber    int64    `protobuf:"varint,21,opt,name=smaller_than_number,json=smallerThanNumber,proto3" json:"smaller_than_number,omitempty"`
+	GreaterThanNumber    int64    `protobuf:"varint,22,opt,name=greater_than_number,json=greaterThanNumber,proto3" json:"greater_than_number,omitempty"`
+	EqualOption          *Option  `protobuf:"bytes,30,opt,name=equal_option,json=equalOption,proto3" json:"equal_option,omitempty"`
+	Regex                string   `protobuf:"bytes,40,opt,name=regex,proto3" json:"regex,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -571,6 +601,20 @@ func (m *Validator) GetEqualText() string {
 	return ""
 }
 
+func (m *Validator) GetSmallerThanLength() int64 {
+	if m != nil {
+		return m.SmallerThanLength
+	}
+	return 0
+}
+
+func (m *Validator) GetGreterThanLength() int64 {
+	if m != nil {
+		return m.GreterThanLength
+	}
+	return 0
+}
+
 func (m *Validator) GetEqualNumber() int64 {
 	if m != nil {
 		return m.EqualNumber
@@ -592,248 +636,255 @@ func (m *Validator) GetGreaterThanNumber() int64 {
 	return 0
 }
 
-type Input struct {
-	Value                string     `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-	Placeholder          string     `protobuf:"bytes,2,opt,name=placeholder,proto3" json:"placeholder,omitempty"`
-	Options              []*Option  `protobuf:"bytes,3,rep,name=options,proto3" json:"options,omitempty"`
-	MinLength            *MinLength `protobuf:"bytes,4,opt,name=min_length,json=minLength,proto3" json:"min_length,omitempty"`
-	MaxLength            *MaxLength `protobuf:"bytes,5,opt,name=max_length,json=maxLength,proto3" json:"max_length,omitempty"`
-	Regex                *Regex     `protobuf:"bytes,6,opt,name=regex,proto3" json:"regex,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
-	XXX_unrecognized     []byte     `json:"-"`
-	XXX_sizecache        int32      `json:"-"`
-}
-
-func (m *Input) Reset()         { *m = Input{} }
-func (m *Input) String() string { return proto.CompactTextString(m) }
-func (*Input) ProtoMessage()    {}
-func (*Input) Descriptor() ([]byte, []int) {
-	return fileDescriptor_875c494c6e4805a2, []int{9}
-}
-
-func (m *Input) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Input.Unmarshal(m, b)
-}
-func (m *Input) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Input.Marshal(b, m, deterministic)
-}
-func (m *Input) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Input.Merge(m, src)
-}
-func (m *Input) XXX_Size() int {
-	return xxx_messageInfo_Input.Size(m)
-}
-func (m *Input) XXX_DiscardUnknown() {
-	xxx_messageInfo_Input.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Input proto.InternalMessageInfo
-
-func (m *Input) GetValue() string {
+func (m *Validator) GetEqualOption() *Option {
 	if m != nil {
-		return m.Value
-	}
-	return ""
-}
-
-func (m *Input) GetPlaceholder() string {
-	if m != nil {
-		return m.Placeholder
-	}
-	return ""
-}
-
-func (m *Input) GetOptions() []*Option {
-	if m != nil {
-		return m.Options
+		return m.EqualOption
 	}
 	return nil
 }
 
-func (m *Input) GetMinLength() *MinLength {
-	if m != nil {
-		return m.MinLength
-	}
-	return nil
-}
-
-func (m *Input) GetMaxLength() *MaxLength {
-	if m != nil {
-		return m.MaxLength
-	}
-	return nil
-}
-
-func (m *Input) GetRegex() *Regex {
+func (m *Validator) GetRegex() string {
 	if m != nil {
 		return m.Regex
 	}
-	return nil
+	return ""
 }
 
-type RadioGroup struct {
-	Value                int64     `protobuf:"varint,1,opt,name=value,proto3" json:"value,omitempty"`
+type TextField struct {
+	Value                string    `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
 	Options              []*Option `protobuf:"bytes,2,rep,name=options,proto3" json:"options,omitempty"`
+	Min                  int64     `protobuf:"varint,10,opt,name=min,proto3" json:"min,omitempty"`
+	MinError             string    `protobuf:"bytes,20,opt,name=min_error,json=minError,proto3" json:"min_error,omitempty"`
+	Max                  int64     `protobuf:"varint,11,opt,name=max,proto3" json:"max,omitempty"`
+	MaxError             string    `protobuf:"bytes,21,opt,name=max_error,json=maxError,proto3" json:"max_error,omitempty"`
+	Regex                string    `protobuf:"bytes,12,opt,name=regex,proto3" json:"regex,omitempty"`
+	RegexError           string    `protobuf:"bytes,22,opt,name=regex_error,json=regexError,proto3" json:"regex_error,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_unrecognized     []byte    `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
 
-func (m *RadioGroup) Reset()         { *m = RadioGroup{} }
-func (m *RadioGroup) String() string { return proto.CompactTextString(m) }
-func (*RadioGroup) ProtoMessage()    {}
-func (*RadioGroup) Descriptor() ([]byte, []int) {
-	return fileDescriptor_875c494c6e4805a2, []int{10}
+func (m *TextField) Reset()         { *m = TextField{} }
+func (m *TextField) String() string { return proto.CompactTextString(m) }
+func (*TextField) ProtoMessage()    {}
+func (*TextField) Descriptor() ([]byte, []int) {
+	return fileDescriptor_875c494c6e4805a2, []int{9}
 }
 
-func (m *RadioGroup) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_RadioGroup.Unmarshal(m, b)
+func (m *TextField) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_TextField.Unmarshal(m, b)
 }
-func (m *RadioGroup) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_RadioGroup.Marshal(b, m, deterministic)
+func (m *TextField) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_TextField.Marshal(b, m, deterministic)
 }
-func (m *RadioGroup) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RadioGroup.Merge(m, src)
+func (m *TextField) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TextField.Merge(m, src)
 }
-func (m *RadioGroup) XXX_Size() int {
-	return xxx_messageInfo_RadioGroup.Size(m)
+func (m *TextField) XXX_Size() int {
+	return xxx_messageInfo_TextField.Size(m)
 }
-func (m *RadioGroup) XXX_DiscardUnknown() {
-	xxx_messageInfo_RadioGroup.DiscardUnknown(m)
+func (m *TextField) XXX_DiscardUnknown() {
+	xxx_messageInfo_TextField.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_RadioGroup proto.InternalMessageInfo
+var xxx_messageInfo_TextField proto.InternalMessageInfo
 
-func (m *RadioGroup) GetValue() int64 {
+func (m *TextField) GetValue() string {
 	if m != nil {
 		return m.Value
-	}
-	return 0
-}
-
-func (m *RadioGroup) GetOptions() []*Option {
-	if m != nil {
-		return m.Options
-	}
-	return nil
-}
-
-type Select struct {
-	Value                int64     `protobuf:"varint,1,opt,name=value,proto3" json:"value,omitempty"`
-	Placeholder          string    `protobuf:"bytes,2,opt,name=placeholder,proto3" json:"placeholder,omitempty"`
-	Options              []*Option `protobuf:"bytes,3,rep,name=options,proto3" json:"options,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_unrecognized     []byte    `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
-}
-
-func (m *Select) Reset()         { *m = Select{} }
-func (m *Select) String() string { return proto.CompactTextString(m) }
-func (*Select) ProtoMessage()    {}
-func (*Select) Descriptor() ([]byte, []int) {
-	return fileDescriptor_875c494c6e4805a2, []int{11}
-}
-
-func (m *Select) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Select.Unmarshal(m, b)
-}
-func (m *Select) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Select.Marshal(b, m, deterministic)
-}
-func (m *Select) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Select.Merge(m, src)
-}
-func (m *Select) XXX_Size() int {
-	return xxx_messageInfo_Select.Size(m)
-}
-func (m *Select) XXX_DiscardUnknown() {
-	xxx_messageInfo_Select.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Select proto.InternalMessageInfo
-
-func (m *Select) GetValue() int64 {
-	if m != nil {
-		return m.Value
-	}
-	return 0
-}
-
-func (m *Select) GetPlaceholder() string {
-	if m != nil {
-		return m.Placeholder
 	}
 	return ""
 }
 
-func (m *Select) GetOptions() []*Option {
+func (m *TextField) GetOptions() []*Option {
 	if m != nil {
 		return m.Options
 	}
 	return nil
 }
 
-type Slider struct {
-	Value                int64    `protobuf:"varint,1,opt,name=value,proto3" json:"value,omitempty"`
-	Min                  int64    `protobuf:"varint,2,opt,name=min,proto3" json:"min,omitempty"`
-	Max                  int64    `protobuf:"varint,3,opt,name=max,proto3" json:"max,omitempty"`
-	Step                 int64    `protobuf:"varint,4,opt,name=step,proto3" json:"step,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *Slider) Reset()         { *m = Slider{} }
-func (m *Slider) String() string { return proto.CompactTextString(m) }
-func (*Slider) ProtoMessage()    {}
-func (*Slider) Descriptor() ([]byte, []int) {
-	return fileDescriptor_875c494c6e4805a2, []int{12}
-}
-
-func (m *Slider) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Slider.Unmarshal(m, b)
-}
-func (m *Slider) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Slider.Marshal(b, m, deterministic)
-}
-func (m *Slider) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Slider.Merge(m, src)
-}
-func (m *Slider) XXX_Size() int {
-	return xxx_messageInfo_Slider.Size(m)
-}
-func (m *Slider) XXX_DiscardUnknown() {
-	xxx_messageInfo_Slider.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Slider proto.InternalMessageInfo
-
-func (m *Slider) GetValue() int64 {
-	if m != nil {
-		return m.Value
-	}
-	return 0
-}
-
-func (m *Slider) GetMin() int64 {
+func (m *TextField) GetMin() int64 {
 	if m != nil {
 		return m.Min
 	}
 	return 0
 }
 
-func (m *Slider) GetMax() int64 {
+func (m *TextField) GetMinError() string {
+	if m != nil {
+		return m.MinError
+	}
+	return ""
+}
+
+func (m *TextField) GetMax() int64 {
 	if m != nil {
 		return m.Max
 	}
 	return 0
 }
 
-func (m *Slider) GetStep() int64 {
+func (m *TextField) GetMaxError() string {
+	if m != nil {
+		return m.MaxError
+	}
+	return ""
+}
+
+func (m *TextField) GetRegex() string {
+	if m != nil {
+		return m.Regex
+	}
+	return ""
+}
+
+func (m *TextField) GetRegexError() string {
+	if m != nil {
+		return m.RegexError
+	}
+	return ""
+}
+
+type SelectField struct {
+	Option               *Option    `protobuf:"bytes,1,opt,name=option,proto3" json:"option,omitempty"`
+	Type                 SelectType `protobuf:"varint,2,opt,name=type,proto3,enum=grpcform.SelectType" json:"type,omitempty"`
+	Options              []*Option  `protobuf:"bytes,3,rep,name=options,proto3" json:"options,omitempty"`
+	Error                string     `protobuf:"bytes,4,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
+}
+
+func (m *SelectField) Reset()         { *m = SelectField{} }
+func (m *SelectField) String() string { return proto.CompactTextString(m) }
+func (*SelectField) ProtoMessage()    {}
+func (*SelectField) Descriptor() ([]byte, []int) {
+	return fileDescriptor_875c494c6e4805a2, []int{10}
+}
+
+func (m *SelectField) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SelectField.Unmarshal(m, b)
+}
+func (m *SelectField) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SelectField.Marshal(b, m, deterministic)
+}
+func (m *SelectField) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SelectField.Merge(m, src)
+}
+func (m *SelectField) XXX_Size() int {
+	return xxx_messageInfo_SelectField.Size(m)
+}
+func (m *SelectField) XXX_DiscardUnknown() {
+	xxx_messageInfo_SelectField.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SelectField proto.InternalMessageInfo
+
+func (m *SelectField) GetOption() *Option {
+	if m != nil {
+		return m.Option
+	}
+	return nil
+}
+
+func (m *SelectField) GetType() SelectType {
+	if m != nil {
+		return m.Type
+	}
+	return SelectType_SELECT_TYPE_UNSPECIFIED
+}
+
+func (m *SelectField) GetOptions() []*Option {
+	if m != nil {
+		return m.Options
+	}
+	return nil
+}
+
+func (m *SelectField) GetError() string {
+	if m != nil {
+		return m.Error
+	}
+	return ""
+}
+
+type NumericField struct {
+	Value                int64    `protobuf:"varint,1,opt,name=value,proto3" json:"value,omitempty"`
+	Step                 int64    `protobuf:"varint,2,opt,name=step,proto3" json:"step,omitempty"`
+	Min                  int64    `protobuf:"varint,10,opt,name=min,proto3" json:"min,omitempty"`
+	MinError             string   `protobuf:"bytes,20,opt,name=min_error,json=minError,proto3" json:"min_error,omitempty"`
+	Max                  int64    `protobuf:"varint,11,opt,name=max,proto3" json:"max,omitempty"`
+	MaxError             string   `protobuf:"bytes,21,opt,name=max_error,json=maxError,proto3" json:"max_error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *NumericField) Reset()         { *m = NumericField{} }
+func (m *NumericField) String() string { return proto.CompactTextString(m) }
+func (*NumericField) ProtoMessage()    {}
+func (*NumericField) Descriptor() ([]byte, []int) {
+	return fileDescriptor_875c494c6e4805a2, []int{11}
+}
+
+func (m *NumericField) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_NumericField.Unmarshal(m, b)
+}
+func (m *NumericField) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_NumericField.Marshal(b, m, deterministic)
+}
+func (m *NumericField) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NumericField.Merge(m, src)
+}
+func (m *NumericField) XXX_Size() int {
+	return xxx_messageInfo_NumericField.Size(m)
+}
+func (m *NumericField) XXX_DiscardUnknown() {
+	xxx_messageInfo_NumericField.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NumericField proto.InternalMessageInfo
+
+func (m *NumericField) GetValue() int64 {
+	if m != nil {
+		return m.Value
+	}
+	return 0
+}
+
+func (m *NumericField) GetStep() int64 {
 	if m != nil {
 		return m.Step
 	}
 	return 0
+}
+
+func (m *NumericField) GetMin() int64 {
+	if m != nil {
+		return m.Min
+	}
+	return 0
+}
+
+func (m *NumericField) GetMinError() string {
+	if m != nil {
+		return m.MinError
+	}
+	return ""
+}
+
+func (m *NumericField) GetMax() int64 {
+	if m != nil {
+		return m.Max
+	}
+	return 0
+}
+
+func (m *NumericField) GetMaxError() string {
+	if m != nil {
+		return m.MaxError
+	}
+	return ""
 }
 
 type Option struct {
@@ -848,7 +899,7 @@ func (m *Option) Reset()         { *m = Option{} }
 func (m *Option) String() string { return proto.CompactTextString(m) }
 func (*Option) ProtoMessage()    {}
 func (*Option) Descriptor() ([]byte, []int) {
-	return fileDescriptor_875c494c6e4805a2, []int{13}
+	return fileDescriptor_875c494c6e4805a2, []int{12}
 }
 
 func (m *Option) XXX_Unmarshal(b []byte) error {
@@ -883,161 +934,20 @@ func (m *Option) GetValue() string {
 	return ""
 }
 
-type MinLength struct {
-	Value                int64    `protobuf:"varint,1,opt,name=value,proto3" json:"value,omitempty"`
-	Error                string   `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *MinLength) Reset()         { *m = MinLength{} }
-func (m *MinLength) String() string { return proto.CompactTextString(m) }
-func (*MinLength) ProtoMessage()    {}
-func (*MinLength) Descriptor() ([]byte, []int) {
-	return fileDescriptor_875c494c6e4805a2, []int{14}
-}
-
-func (m *MinLength) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_MinLength.Unmarshal(m, b)
-}
-func (m *MinLength) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_MinLength.Marshal(b, m, deterministic)
-}
-func (m *MinLength) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MinLength.Merge(m, src)
-}
-func (m *MinLength) XXX_Size() int {
-	return xxx_messageInfo_MinLength.Size(m)
-}
-func (m *MinLength) XXX_DiscardUnknown() {
-	xxx_messageInfo_MinLength.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MinLength proto.InternalMessageInfo
-
-func (m *MinLength) GetValue() int64 {
-	if m != nil {
-		return m.Value
-	}
-	return 0
-}
-
-func (m *MinLength) GetError() string {
-	if m != nil {
-		return m.Error
-	}
-	return ""
-}
-
-type MaxLength struct {
-	Value                int64    `protobuf:"varint,1,opt,name=value,proto3" json:"value,omitempty"`
-	Error                string   `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *MaxLength) Reset()         { *m = MaxLength{} }
-func (m *MaxLength) String() string { return proto.CompactTextString(m) }
-func (*MaxLength) ProtoMessage()    {}
-func (*MaxLength) Descriptor() ([]byte, []int) {
-	return fileDescriptor_875c494c6e4805a2, []int{15}
-}
-
-func (m *MaxLength) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_MaxLength.Unmarshal(m, b)
-}
-func (m *MaxLength) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_MaxLength.Marshal(b, m, deterministic)
-}
-func (m *MaxLength) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MaxLength.Merge(m, src)
-}
-func (m *MaxLength) XXX_Size() int {
-	return xxx_messageInfo_MaxLength.Size(m)
-}
-func (m *MaxLength) XXX_DiscardUnknown() {
-	xxx_messageInfo_MaxLength.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MaxLength proto.InternalMessageInfo
-
-func (m *MaxLength) GetValue() int64 {
-	if m != nil {
-		return m.Value
-	}
-	return 0
-}
-
-func (m *MaxLength) GetError() string {
-	if m != nil {
-		return m.Error
-	}
-	return ""
-}
-
-type Regex struct {
-	Value                string   `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-	Error                string   `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *Regex) Reset()         { *m = Regex{} }
-func (m *Regex) String() string { return proto.CompactTextString(m) }
-func (*Regex) ProtoMessage()    {}
-func (*Regex) Descriptor() ([]byte, []int) {
-	return fileDescriptor_875c494c6e4805a2, []int{16}
-}
-
-func (m *Regex) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Regex.Unmarshal(m, b)
-}
-func (m *Regex) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Regex.Marshal(b, m, deterministic)
-}
-func (m *Regex) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Regex.Merge(m, src)
-}
-func (m *Regex) XXX_Size() int {
-	return xxx_messageInfo_Regex.Size(m)
-}
-func (m *Regex) XXX_DiscardUnknown() {
-	xxx_messageInfo_Regex.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Regex proto.InternalMessageInfo
-
-func (m *Regex) GetValue() string {
-	if m != nil {
-		return m.Value
-	}
-	return ""
-}
-
-func (m *Regex) GetError() string {
-	if m != nil {
-		return m.Error
-	}
-	return ""
-}
-
 type Button struct {
-	Label                string      `protobuf:"bytes,1,opt,name=label,proto3" json:"label,omitempty"`
-	Status               STATUS      `protobuf:"varint,2,opt,name=status,proto3,enum=grpcform.STATUS" json:"status,omitempty"`
-	ButtonFunc           BUTTON_FUNC `protobuf:"varint,3,opt,name=button_func,json=buttonFunc,proto3,enum=grpcform.BUTTON_FUNC" json:"button_func,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
-	XXX_unrecognized     []byte      `json:"-"`
-	XXX_sizecache        int32       `json:"-"`
+	Label                string         `protobuf:"bytes,1,opt,name=label,proto3" json:"label,omitempty"`
+	Status               Status         `protobuf:"varint,2,opt,name=status,proto3,enum=grpcform.Status" json:"status,omitempty"`
+	Type                 ButtonFuncType `protobuf:"varint,3,opt,name=type,proto3,enum=grpcform.ButtonFuncType" json:"type,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
 }
 
 func (m *Button) Reset()         { *m = Button{} }
 func (m *Button) String() string { return proto.CompactTextString(m) }
 func (*Button) ProtoMessage()    {}
 func (*Button) Descriptor() ([]byte, []int) {
-	return fileDescriptor_875c494c6e4805a2, []int{17}
+	return fileDescriptor_875c494c6e4805a2, []int{13}
 }
 
 func (m *Button) XXX_Unmarshal(b []byte) error {
@@ -1065,23 +975,24 @@ func (m *Button) GetLabel() string {
 	return ""
 }
 
-func (m *Button) GetStatus() STATUS {
+func (m *Button) GetStatus() Status {
 	if m != nil {
 		return m.Status
 	}
-	return STATUS_ACTIVE
+	return Status_STATUS_UNSPECIFIED
 }
 
-func (m *Button) GetButtonFunc() BUTTON_FUNC {
+func (m *Button) GetType() ButtonFuncType {
 	if m != nil {
-		return m.ButtonFunc
+		return m.Type
 	}
-	return BUTTON_FUNC_VALIDATE
+	return ButtonFuncType_BUTTON_FUNC_UNSPECIFIED
 }
 
 func init() {
-	proto.RegisterEnum("grpcform.STATUS", STATUS_name, STATUS_value)
-	proto.RegisterEnum("grpcform.BUTTON_FUNC", BUTTON_FUNC_name, BUTTON_FUNC_value)
+	proto.RegisterEnum("grpcform.Status", Status_name, Status_value)
+	proto.RegisterEnum("grpcform.SelectType", SelectType_name, SelectType_value)
+	proto.RegisterEnum("grpcform.ButtonFuncType", ButtonFuncType_name, ButtonFuncType_value)
 	proto.RegisterType((*GetFormRequest)(nil), "grpcform.GetFormRequest")
 	proto.RegisterType((*SendFormResponse)(nil), "grpcform.SendFormResponse")
 	proto.RegisterType((*Form)(nil), "grpcform.Form")
@@ -1091,82 +1002,83 @@ func init() {
 	proto.RegisterType((*DisabledIf)(nil), "grpcform.DisabledIf")
 	proto.RegisterType((*HiddenIf)(nil), "grpcform.HiddenIf")
 	proto.RegisterType((*Validator)(nil), "grpcform.Validator")
-	proto.RegisterType((*Input)(nil), "grpcform.Input")
-	proto.RegisterType((*RadioGroup)(nil), "grpcform.RadioGroup")
-	proto.RegisterType((*Select)(nil), "grpcform.Select")
-	proto.RegisterType((*Slider)(nil), "grpcform.Slider")
+	proto.RegisterType((*TextField)(nil), "grpcform.TextField")
+	proto.RegisterType((*SelectField)(nil), "grpcform.SelectField")
+	proto.RegisterType((*NumericField)(nil), "grpcform.NumericField")
 	proto.RegisterType((*Option)(nil), "grpcform.Option")
-	proto.RegisterType((*MinLength)(nil), "grpcform.MinLength")
-	proto.RegisterType((*MaxLength)(nil), "grpcform.MaxLength")
-	proto.RegisterType((*Regex)(nil), "grpcform.Regex")
 	proto.RegisterType((*Button)(nil), "grpcform.Button")
 }
 
 func init() { proto.RegisterFile("grpc-form.proto", fileDescriptor_875c494c6e4805a2) }
 
 var fileDescriptor_875c494c6e4805a2 = []byte{
-	// 969 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0x4b, 0x6f, 0x23, 0x45,
-	0x10, 0xce, 0xf8, 0x31, 0xb1, 0x6b, 0xa2, 0x64, 0xe8, 0x5d, 0xa4, 0xd1, 0x4a, 0x48, 0x61, 0x04,
-	0x22, 0x44, 0xc2, 0x5a, 0x39, 0xbb, 0xc0, 0x01, 0x69, 0xe5, 0xac, 0x9d, 0x5d, 0x4b, 0xc1, 0x11,
-	0x6d, 0xc7, 0x07, 0x2e, 0x56, 0xdb, 0xd3, 0xb6, 0x07, 0xcd, 0xc3, 0xe9, 0xe9, 0x89, 0x7c, 0xe4,
-	0x02, 0xbf, 0x87, 0xff, 0xc0, 0xbf, 0xe2, 0x84, 0xba, 0xa6, 0xe7, 0x11, 0x27, 0x16, 0x22, 0x70,
-	0xeb, 0xaa, 0xef, 0xab, 0xea, 0xee, 0x7a, 0x74, 0x17, 0x9c, 0xac, 0xc4, 0x66, 0xf1, 0xcd, 0x32,
-	0x16, 0x61, 0x67, 0x23, 0x62, 0x19, 0x93, 0x96, 0x52, 0x28, 0xd9, 0xfd, 0x02, 0x8e, 0x3f, 0x70,
-	0x79, 0x15, 0x8b, 0x90, 0xf2, 0xbb, 0x94, 0x27, 0x92, 0x10, 0x68, 0x44, 0x2c, 0xe4, 0x8e, 0x71,
-	0x6a, 0x9c, 0xb5, 0x29, 0xae, 0xdd, 0x5f, 0xc0, 0x1e, 0xf3, 0xc8, 0xcb, 0x68, 0xc9, 0x26, 0x8e,
-	0x12, 0x4e, 0x5c, 0x68, 0x28, 0x0f, 0xc8, 0xb3, 0xba, 0xc7, 0x9d, 0xdc, 0x65, 0x07, 0x59, 0x88,
-	0x11, 0x07, 0x0e, 0x93, 0x74, 0xb1, 0xe0, 0xdc, 0x73, 0x6a, 0xa7, 0xc6, 0x59, 0x8b, 0xe6, 0xa2,
-	0x42, 0x42, 0x9e, 0x24, 0x6c, 0xc5, 0x9d, 0x3a, 0x6e, 0x94, 0x8b, 0xee, 0x6f, 0x06, 0x34, 0x94,
-	0x8b, 0xa7, 0x0e, 0x42, 0xbe, 0x02, 0x73, 0xe9, 0xf3, 0xc0, 0x4b, 0x9c, 0xda, 0x69, 0xfd, 0xcc,
-	0xea, 0x9e, 0x54, 0xb6, 0x55, 0x7a, 0xaa, 0x61, 0x72, 0x0e, 0x87, 0xf3, 0x54, 0xca, 0x38, 0x4a,
-	0x9c, 0x3a, 0x32, 0xed, 0x92, 0x79, 0x89, 0x00, 0xcd, 0x09, 0xe4, 0x25, 0x34, 0xef, 0x59, 0xe0,
-	0x7b, 0x4e, 0x03, 0xcf, 0x98, 0x09, 0xee, 0xef, 0x0d, 0x68, 0xa2, 0x4f, 0x85, 0x07, 0x6c, 0xce,
-	0x03, 0x7d, 0x92, 0x4c, 0x20, 0x67, 0x60, 0x26, 0x92, 0xc9, 0x34, 0xc1, 0xab, 0x1d, 0x57, 0x37,
-	0x18, 0x4f, 0x7a, 0x93, 0xdb, 0x31, 0xd5, 0x38, 0xe9, 0x40, 0x8b, 0x2d, 0xa4, 0x7f, 0xcf, 0x87,
-	0x4b, 0xbc, 0xac, 0xd5, 0x25, 0x25, 0xb7, 0xa7, 0x11, 0x5a, 0x70, 0xc8, 0x1b, 0x00, 0xc1, 0xef,
-	0x52, 0x5f, 0x70, 0x6f, 0xb8, 0xc4, 0x43, 0x59, 0xdd, 0x97, 0xa5, 0x05, 0x2d, 0x30, 0x5a, 0xe1,
-	0x29, 0x2b, 0xcf, 0x4f, 0xd8, 0x3c, 0x40, 0xab, 0xe6, 0xae, 0x55, 0xbf, 0xc0, 0x68, 0x85, 0xa7,
-	0xce, 0xb6, 0xf6, 0x3d, 0x8f, 0x47, 0xc3, 0xa5, 0x63, 0xee, 0x9e, 0xed, 0xa3, 0x46, 0x68, 0xc1,
-	0x21, 0x5f, 0x83, 0xed, 0x47, 0x89, 0x64, 0x91, 0x9c, 0x61, 0x98, 0x98, 0xe4, 0xce, 0x21, 0x86,
-	0xed, 0x44, 0xeb, 0xa7, 0x5a, 0xad, 0xc2, 0xc6, 0x85, 0x88, 0x85, 0xd3, 0xca, 0xc2, 0x86, 0x02,
-	0xf9, 0x12, 0x9a, 0x7e, 0xb4, 0x49, 0xa5, 0xd3, 0xc6, 0xdd, 0x2a, 0x09, 0x1c, 0x2a, 0x35, 0xcd,
-	0x50, 0xf2, 0x16, 0x2c, 0xc1, 0x3c, 0x3f, 0x9e, 0xad, 0x44, 0x9c, 0x6e, 0x1c, 0x78, 0x14, 0x04,
-	0x05, 0x7e, 0x50, 0x18, 0x05, 0x51, 0xac, 0x31, 0x29, 0x3c, 0xe0, 0x0b, 0xe9, 0x58, 0x68, 0x51,
-	0x4d, 0x0a, 0xea, 0xa9, 0xc6, 0x91, 0x19, 0xf8, 0x1e, 0x17, 0xce, 0xd1, 0x23, 0x26, 0xea, 0xa9,
-	0xc6, 0xdd, 0x77, 0xd0, 0xca, 0x93, 0x44, 0x2e, 0x00, 0xf4, 0xb5, 0x63, 0x91, 0x38, 0x06, 0x56,
-	0xd6, 0x8b, 0xd2, 0x72, 0x9a, 0x63, 0xb4, 0x42, 0x73, 0x7b, 0x00, 0x65, 0xce, 0x9e, 0xed, 0xa2,
-	0x4c, 0xe0, 0xf3, 0x5c, 0xbc, 0x83, 0x56, 0x9e, 0xcf, 0xe7, 0x39, 0xf8, 0xd3, 0x80, 0x76, 0x81,
-	0xa8, 0xec, 0xfa, 0x91, 0xc7, 0xb7, 0xd8, 0x14, 0x75, 0x9a, 0x09, 0xe4, 0x33, 0x00, 0x7e, 0x97,
-	0xb2, 0x60, 0x26, 0xf9, 0x56, 0x62, 0x63, 0xb4, 0x69, 0x1b, 0x35, 0x13, 0xbe, 0x95, 0xe4, 0x73,
-	0x38, 0xca, 0xe0, 0x28, 0x0d, 0xe7, 0x5c, 0x60, 0x37, 0xd4, 0xa9, 0x85, 0xba, 0x11, 0xaa, 0x48,
-	0x07, 0x5e, 0x24, 0x21, 0x0b, 0x02, 0x2e, 0x66, 0x72, 0xcd, 0xa2, 0x9c, 0xd9, 0x40, 0xe6, 0x27,
-	0x1a, 0x9a, 0xac, 0x59, 0x54, 0xf2, 0x57, 0x82, 0x33, 0xb9, 0xc3, 0x6f, 0x66, 0x7c, 0x0d, 0x95,
-	0x7c, 0xf7, 0x2f, 0x03, 0x9a, 0x58, 0x69, 0xba, 0xed, 0xd3, 0xfc, 0x81, 0xc9, 0x04, 0x72, 0x0a,
-	0xd6, 0x26, 0x60, 0x0b, 0xbe, 0x8e, 0x03, 0x55, 0x1c, 0xd9, 0x15, 0xaa, 0x2a, 0xf5, 0xb4, 0xc4,
-	0x1b, 0xe9, 0x3f, 0xf9, 0xb4, 0xdc, 0x20, 0x40, 0x73, 0x02, 0xe9, 0x02, 0x84, 0x7e, 0x34, 0x0b,
-	0x78, 0xb4, 0x92, 0x6b, 0xdd, 0xca, 0x95, 0x40, 0xff, 0xe8, 0x47, 0xd7, 0x08, 0xd1, 0x76, 0x98,
-	0x2f, 0xd1, 0x86, 0x6d, 0x73, 0x9b, 0xe6, 0x23, 0x1b, 0xb6, 0x2d, 0x6c, 0xf2, 0xa5, 0xea, 0x2a,
-	0xc1, 0x57, 0x7c, 0xab, 0x7b, 0xf8, 0xa4, 0xfa, 0x5a, 0xac, 0xf8, 0x96, 0x66, 0xa8, 0x3b, 0x02,
-	0x28, 0x1b, 0xe7, 0x61, 0x00, 0xea, 0x79, 0x00, 0x2a, 0xd7, 0xab, 0xfd, 0xc3, 0xf5, 0xdc, 0x00,
-	0xcc, 0xac, 0xad, 0xf6, 0xf8, 0xfa, 0x5f, 0x83, 0xe9, 0x4e, 0xc1, 0xcc, 0x5a, 0x73, 0xcf, 0x6e,
-	0x36, 0xd4, 0x43, 0x3f, 0xc2, 0x5d, 0xea, 0x54, 0x2d, 0x51, 0xc3, 0xb6, 0xba, 0xcc, 0xd4, 0x52,
-	0x7d, 0x2a, 0x89, 0xe4, 0x1b, 0x5d, 0x4f, 0xb8, 0x76, 0xdf, 0x80, 0x99, 0x6d, 0xb5, 0xa7, 0xa8,
-	0x8b, 0xdd, 0x6a, 0x95, 0x42, 0x71, 0xbf, 0x83, 0x76, 0x91, 0xbe, 0x3d, 0x07, 0x2a, 0x5e, 0xc0,
-	0x5a, 0xe5, 0x05, 0x44, 0xc3, 0x22, 0x71, 0xff, 0xc6, 0xf0, 0x02, 0x9a, 0x98, 0xcd, 0x3d, 0x95,
-	0xfb, 0xb4, 0xd1, 0xaf, 0x06, 0x98, 0xd9, 0x87, 0xf7, 0x9f, 0xff, 0xb1, 0x6f, 0xc1, 0xca, 0xbe,
-	0xcc, 0xd9, 0x32, 0x8d, 0x16, 0x18, 0xd5, 0xe3, 0xee, 0xa7, 0x95, 0x7f, 0xf5, 0x76, 0x32, 0xb9,
-	0x19, 0xcd, 0xae, 0x6e, 0x47, 0xef, 0x29, 0x64, 0xcc, 0xab, 0x34, 0x5a, 0x9c, 0xff, 0x00, 0x66,
-	0xe6, 0x89, 0x00, 0x98, 0xbd, 0xf7, 0x93, 0xe1, 0x74, 0x60, 0x1f, 0x90, 0x23, 0x68, 0xd1, 0xc1,
-	0x4f, 0xb7, 0x43, 0x3a, 0xe8, 0xdb, 0x86, 0x92, 0xfa, 0xc3, 0x71, 0xef, 0xf2, 0x7a, 0xd0, 0xb7,
-	0x6b, 0x8a, 0xf7, 0x71, 0xd8, 0xef, 0x0f, 0x46, 0x76, 0xfd, 0xfc, 0x35, 0x58, 0x15, 0xc7, 0x8a,
-	0x38, 0xed, 0x5d, 0x0f, 0xfb, 0xbd, 0x89, 0x72, 0xd2, 0x86, 0x26, 0x1d, 0x8c, 0x07, 0x13, 0xdb,
-	0x20, 0x2d, 0x68, 0x8c, 0x07, 0xa3, 0xbe, 0x5d, 0xeb, 0xfe, 0x61, 0x80, 0xa5, 0x26, 0x88, 0x31,
-	0x17, 0xf7, 0xfe, 0x82, 0x93, 0xb7, 0x70, 0xa8, 0x67, 0x1c, 0xe2, 0x94, 0xa7, 0x7d, 0x38, 0xf6,
-	0xbc, 0xda, 0x19, 0x60, 0xdc, 0x03, 0xf2, 0x1a, 0x8e, 0xf2, 0xbf, 0x0c, 0x6d, 0x77, 0x18, 0x4f,
-	0x58, 0x7c, 0x0f, 0xad, 0x7c, 0x4c, 0x7a, 0xc4, 0x7e, 0x55, 0xfd, 0x89, 0x1e, 0x8e, 0x52, 0xee,
-	0xc1, 0x25, 0xfc, 0x5c, 0x8c, 0x64, 0x73, 0x13, 0x67, 0xb4, 0x8b, 0xbf, 0x03, 0x00, 0x00, 0xff,
-	0xff, 0x5b, 0x2e, 0x96, 0x09, 0xb6, 0x09, 0x00, 0x00,
+	// 1056 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0xe1, 0x6e, 0xe3, 0x44,
+	0x10, 0xae, 0xe3, 0x34, 0x75, 0x26, 0xa1, 0x35, 0x7b, 0x6d, 0xcf, 0xba, 0x13, 0x50, 0x2c, 0x24,
+	0x42, 0x75, 0x14, 0xd4, 0x72, 0xd2, 0x49, 0xfc, 0x38, 0xd2, 0xc6, 0xe5, 0x2c, 0xe5, 0x72, 0x65,
+	0xed, 0x54, 0x82, 0x3f, 0x91, 0x9b, 0x6c, 0x53, 0xa3, 0xd8, 0x4e, 0xed, 0x75, 0x95, 0xfb, 0x8b,
+	0xc4, 0x2b, 0xf0, 0x02, 0xbc, 0x00, 0xcf, 0xc4, 0x6f, 0x1e, 0x02, 0xed, 0xec, 0x3a, 0x76, 0x93,
+	0x22, 0xa4, 0x22, 0xfe, 0xed, 0xcc, 0xf7, 0x7d, 0xb3, 0xb3, 0xbb, 0xe3, 0xf1, 0xc0, 0xce, 0x34,
+	0x9d, 0x8f, 0xbf, 0xbc, 0x4e, 0xd2, 0xe8, 0x68, 0x9e, 0x26, 0x3c, 0x21, 0x86, 0x70, 0x08, 0xdb,
+	0xfe, 0x0c, 0xb6, 0xbf, 0x67, 0xfc, 0x3c, 0x49, 0x23, 0xca, 0x6e, 0x73, 0x96, 0x71, 0x42, 0xa0,
+	0x1e, 0x07, 0x11, 0xb3, 0xb4, 0x03, 0xad, 0xd3, 0xa4, 0xb8, 0xb6, 0x7f, 0x06, 0xd3, 0x63, 0xf1,
+	0x44, 0xd2, 0xb2, 0x79, 0x12, 0x67, 0x8c, 0xd8, 0x50, 0x17, 0x11, 0x90, 0xd7, 0x3a, 0xde, 0x3e,
+	0x2a, 0x42, 0x1e, 0x21, 0x0b, 0x31, 0x62, 0xc1, 0x56, 0x96, 0x8f, 0xc7, 0x8c, 0x4d, 0xac, 0xda,
+	0x81, 0xd6, 0x31, 0x68, 0x61, 0x0a, 0x24, 0x62, 0x59, 0x16, 0x4c, 0x99, 0xa5, 0xe3, 0x46, 0x85,
+	0x69, 0xff, 0xaa, 0x41, 0x5d, 0x84, 0x78, 0x28, 0x11, 0xf2, 0x39, 0x34, 0xae, 0x43, 0x36, 0x9b,
+	0x64, 0x56, 0xed, 0x40, 0xef, 0xb4, 0x8e, 0x77, 0x2a, 0xdb, 0x0a, 0x3f, 0x55, 0x30, 0x39, 0x84,
+	0xad, 0xab, 0x9c, 0xf3, 0x24, 0xce, 0x2c, 0x1d, 0x99, 0x66, 0xc9, 0x3c, 0x45, 0x80, 0x16, 0x04,
+	0xb2, 0x0b, 0x9b, 0x77, 0xc1, 0x2c, 0x9c, 0x58, 0x75, 0xcc, 0x51, 0x1a, 0xf6, 0x2f, 0x75, 0xd8,
+	0xc4, 0x98, 0x02, 0x9f, 0x05, 0x57, 0x6c, 0xa6, 0x32, 0x91, 0x06, 0xe9, 0x40, 0x23, 0xe3, 0x01,
+	0xcf, 0x33, 0x3c, 0xda, 0x76, 0x75, 0x03, 0x0f, 0xfd, 0x54, 0xe1, 0xe4, 0x0b, 0x30, 0xc3, 0x38,
+	0xe3, 0x41, 0xcc, 0x47, 0x18, 0x3a, 0xe0, 0xf2, 0xd0, 0x06, 0xdd, 0x51, 0xfe, 0x4b, 0xe5, 0x16,
+	0x5b, 0xb1, 0x34, 0x4d, 0x52, 0x4c, 0xa5, 0x49, 0xa5, 0x41, 0x8e, 0x01, 0x38, 0x5b, 0xf0, 0x11,
+	0x9e, 0xcd, 0x02, 0xbc, 0xf0, 0x27, 0xe5, 0x76, 0x3e, 0x5b, 0x70, 0x79, 0xfa, 0x26, 0x2f, 0x96,
+	0xe4, 0x15, 0xb4, 0x33, 0x36, 0x63, 0xe3, 0x42, 0xd5, 0x42, 0xd5, 0x5e, 0x25, 0x49, 0x44, 0xa5,
+	0xae, 0x95, 0x95, 0x06, 0xf9, 0x16, 0x3e, 0x88, 0xf3, 0x88, 0xa5, 0xe1, 0x58, 0x49, 0xdb, 0x28,
+	0xdd, 0x2f, 0xa5, 0x03, 0x09, 0x4b, 0x6d, 0x3b, 0xae, 0x58, 0xe4, 0x08, 0x8c, 0x60, 0xcc, 0xc3,
+	0x3b, 0xe6, 0x5e, 0x5b, 0xbb, 0xa8, 0x23, 0xa5, 0xae, 0xab, 0x10, 0xba, 0xe4, 0x90, 0x97, 0xd0,
+	0x4a, 0xd9, 0x6d, 0x1e, 0xa6, 0x6c, 0x32, 0x0a, 0xaf, 0xad, 0x3d, 0x94, 0xec, 0x96, 0x12, 0xaa,
+	0x40, 0xf7, 0x9a, 0x42, 0xba, 0x5c, 0x0b, 0xd9, 0x24, 0xcc, 0x82, 0xab, 0x99, 0x94, 0xed, 0xaf,
+	0xca, 0x7a, 0x0a, 0x14, 0xb2, 0xc9, 0x72, 0x4d, 0xbe, 0x82, 0xe6, 0x4d, 0x38, 0x99, 0xb0, 0x58,
+	0x88, 0x9e, 0xae, 0xa6, 0xf7, 0x06, 0x21, 0x91, 0xde, 0x8d, 0x5a, 0xd9, 0xaf, 0xc1, 0x28, 0x92,
+	0x26, 0x27, 0x00, 0xea, 0xf9, 0x92, 0x34, 0xb3, 0x34, 0xac, 0xaa, 0xca, 0x2b, 0x5c, 0x16, 0x18,
+	0xad, 0xd0, 0xec, 0x2e, 0x40, 0x79, 0x84, 0x47, 0x87, 0x28, 0x8f, 0xf3, 0xb8, 0x10, 0xaf, 0xc1,
+	0x28, 0x0e, 0xf7, 0xb8, 0x00, 0x7f, 0xd5, 0xa0, 0xb9, 0x44, 0x44, 0x95, 0x86, 0xf1, 0x84, 0x2d,
+	0xf0, 0x83, 0xd0, 0xa9, 0x34, 0xc8, 0x47, 0x00, 0xec, 0x36, 0x0f, 0x66, 0x23, 0x51, 0x84, 0x58,
+	0xa5, 0x4d, 0xda, 0x44, 0x8f, 0x28, 0x50, 0x72, 0x04, 0x4f, 0xb2, 0x28, 0x98, 0xcd, 0x58, 0x3a,
+	0xe2, 0x37, 0x41, 0x3c, 0x9a, 0xb1, 0x78, 0xca, 0x6f, 0xb0, 0x2e, 0x75, 0xfa, 0xa1, 0x82, 0xfc,
+	0x9b, 0x20, 0xee, 0x23, 0x40, 0x5e, 0x00, 0x99, 0xa6, 0x8c, 0xaf, 0xd0, 0xdb, 0x48, 0x37, 0x25,
+	0x52, 0x61, 0x7f, 0x0a, 0x6d, 0xb9, 0x79, 0x9c, 0x47, 0x57, 0x2c, 0xc5, 0xda, 0xd3, 0x69, 0x0b,
+	0x7d, 0x03, 0x74, 0xad, 0x25, 0xa0, 0x98, 0x7b, 0x6b, 0x09, 0x94, 0xfc, 0x69, 0xca, 0x02, 0xbe,
+	0xc2, 0xdf, 0x97, 0x7c, 0x05, 0x55, 0xf8, 0x27, 0x45, 0x0a, 0xc9, 0x9c, 0x87, 0x49, 0x6c, 0x7d,
+	0x8c, 0xf5, 0x55, 0x69, 0x0b, 0xef, 0xd0, 0xaf, 0x92, 0x92, 0x86, 0xb8, 0xca, 0x94, 0x4d, 0xd9,
+	0xc2, 0xea, 0xc8, 0x0f, 0x1e, 0x0d, 0xfb, 0x4f, 0x0d, 0x9a, 0xcb, 0xaf, 0x5a, 0xf5, 0xa7, 0xbc,
+	0xe8, 0x84, 0xd2, 0x10, 0x1d, 0x4e, 0x6e, 0x54, 0xf4, 0xc2, 0xf5, 0x9d, 0x0a, 0x02, 0x31, 0x41,
+	0x8f, 0xc2, 0x18, 0xdf, 0x44, 0xa7, 0x62, 0x49, 0x9e, 0x43, 0x33, 0x0a, 0xe3, 0x91, 0x6c, 0x36,
+	0xbb, 0x18, 0xd7, 0x88, 0xc2, 0xd8, 0xc1, 0x7e, 0x23, 0xe8, 0xc1, 0x42, 0x3d, 0x8d, 0x58, 0x22,
+	0x3d, 0x58, 0x28, 0xfa, 0x9e, 0xa2, 0x07, 0x0b, 0x49, 0x5f, 0x9e, 0xa1, 0x5d, 0x39, 0x03, 0xf9,
+	0x44, 0x7c, 0xd9, 0x53, 0x56, 0x88, 0xf6, 0x11, 0x03, 0x74, 0xa1, 0xcc, 0xfe, 0x5d, 0x83, 0x56,
+	0xa5, 0x09, 0x89, 0x86, 0xaa, 0x6e, 0x4e, 0xfb, 0x87, 0x9b, 0x53, 0x38, 0xe9, 0x40, 0x9d, 0xbf,
+	0x9f, 0x33, 0xd5, 0x78, 0x77, 0x57, 0x7b, 0x9a, 0xff, 0x7e, 0xce, 0x28, 0x32, 0xaa, 0x97, 0xa4,
+	0xff, 0xdb, 0x25, 0x3d, 0xd8, 0x7b, 0xed, 0xdf, 0x34, 0x68, 0x57, 0xfb, 0xdd, 0xfd, 0xd7, 0xd0,
+	0x8b, 0xd7, 0x20, 0x50, 0xcf, 0x38, 0x9b, 0x63, 0x4a, 0x3a, 0xc5, 0xf5, 0xff, 0x7b, 0xeb, 0xf6,
+	0x37, 0xd0, 0x28, 0x6b, 0xe8, 0x81, 0xcf, 0x71, 0x99, 0x67, 0xad, 0x52, 0x35, 0xf6, 0x1d, 0x34,
+	0xe4, 0xef, 0xef, 0x3f, 0xff, 0xd5, 0x5e, 0xa8, 0x47, 0xd0, 0x91, 0x67, 0xad, 0xfe, 0x5e, 0xcf,
+	0xf3, 0x78, 0x5c, 0x3e, 0xc4, 0xa1, 0x0f, 0x0d, 0xa9, 0x27, 0xfb, 0x40, 0x3c, 0xbf, 0xeb, 0x0f,
+	0xbd, 0xd1, 0x70, 0xe0, 0x5d, 0x38, 0x67, 0xee, 0xb9, 0xeb, 0xf4, 0xcc, 0x0d, 0x02, 0xd0, 0xe8,
+	0x9e, 0xf9, 0xee, 0xa5, 0x63, 0x6a, 0xa4, 0x0d, 0x06, 0x75, 0x7e, 0x18, 0xba, 0xd4, 0xe9, 0x99,
+	0x35, 0x61, 0xf5, 0x5c, 0xaf, 0x7b, 0xda, 0x77, 0x7a, 0xa6, 0x2e, 0x78, 0x6f, 0xdc, 0x5e, 0xcf,
+	0x19, 0x98, 0xf5, 0xc3, 0xef, 0x00, 0xca, 0x27, 0x27, 0xcf, 0xe1, 0xa9, 0xe7, 0xf4, 0x9d, 0x33,
+	0x7f, 0xe4, 0xff, 0x78, 0xe1, 0xac, 0x87, 0xf7, 0xdc, 0xb7, 0x17, 0x7d, 0x11, 0xbe, 0x09, 0x9b,
+	0x6f, 0x87, 0x7d, 0xdf, 0x35, 0x6b, 0x87, 0x17, 0xb0, 0x7d, 0x3f, 0x5f, 0x11, 0xe5, 0x74, 0xe8,
+	0xfb, 0xef, 0x06, 0xa3, 0xf3, 0xe1, 0xe0, 0x6c, 0x25, 0x4a, 0x1b, 0x8c, 0xcb, 0x6e, 0xdf, 0xed,
+	0x75, 0x7d, 0x15, 0x87, 0x3a, 0x9e, 0xe3, 0x9b, 0x35, 0x62, 0x40, 0xdd, 0x73, 0x06, 0x3d, 0x53,
+	0x3f, 0xfe, 0x43, 0x83, 0x96, 0x98, 0x5f, 0x3c, 0x96, 0xde, 0x85, 0x63, 0x46, 0x5e, 0xc2, 0x96,
+	0x9a, 0xb0, 0x48, 0xe5, 0x92, 0xee, 0x0f, 0x5d, 0xcf, 0x56, 0xc6, 0x27, 0x7b, 0x83, 0x7c, 0x0d,
+	0xed, 0x62, 0x2a, 0x40, 0xed, 0x0a, 0xe3, 0x01, 0xc5, 0x2b, 0x30, 0x8a, 0x21, 0x6d, 0x8d, 0xfd,
+	0xac, 0xfa, 0x8d, 0xdc, 0x1f, 0xe4, 0xec, 0x8d, 0x53, 0xf8, 0x69, 0x39, 0x10, 0x5e, 0x35, 0x70,
+	0x42, 0x3c, 0xf9, 0x3b, 0x00, 0x00, 0xff, 0xff, 0x56, 0x48, 0xae, 0x62, 0x34, 0x0a, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.

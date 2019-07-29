@@ -27,24 +27,24 @@ message Form {
 
 message Field {
     string label = 1;
-    STATUS status = 2;
-    ActiveIf activeIf = 3;
-    RequiredIf requiredIf = 4;
-    DisabledIf disabledIf = 5;
-    HiddenIf hiddenIf = 6;
-    bool instant_validate = 7;
-    string error = 8;
-    Input input = 9;
-    RadioGroup radio_group = 10;
-    Select select = 11;
-    Slider slider = 12;
+    Status status = 2;
+    bool instant_validate = 3;
+    string error = 4;
+    TextField text_field = 10;
+    SelectField select_field = 11;
+    NumericField numeric_field = 12;
+    ActiveIf activeIf = 20;
+    RequiredIf required_if = 21;
+    DisabledIf disabled_if = 22;
+    HiddenIf hidden_if = 23;
 }
 
-enum STATUS {
-    ACTIVE = 0;
-    REQUIRED = 1;
-    DISABLED = 2;
-    HIDDEN = 3;
+enum Status {
+    STATUS_UNSPECIFIED = 0;
+    ACTIVE = 1;
+    REQUIRED = 2;
+    DISABLED = 3;
+    HIDDEN = 4;
 }
 
 message ActiveIf {
@@ -65,37 +65,47 @@ message HiddenIf {
 
 message Validator {
     int64 index = 1;
-    string equal_text = 2;
-    int64 equal_number = 3;
-    int64 smaller_than_number = 4;
-    int64 greater_than_number = 5;
+    string equal_text = 10;
+    int64 smaller_than_length = 11;
+    int64 greter_than_length = 12;
+    int64 equal_number = 20;
+    int64 smaller_than_number = 21;
+    int64 greater_than_number = 22;
+    Option equal_option = 30;
+    string regex = 40;
 }
 
-message Input {
+message TextField {
     string value = 1;
-    string placeholder = 2;
-    repeated Option options = 3;
-    MinLength min_length = 4;
-    MaxLength max_length = 5;
-    Regex regex = 6;
-}
-
-message RadioGroup {
-    int64 value = 1;
     repeated Option options = 2;
+    int64 min = 10;
+    string min_error = 20;
+    int64 max = 11;
+    string max_error = 21;
+    string regex = 12;
+    string regex_error = 22;
 }
 
-message Select {
-    int64 value = 1;
-    string placeholder = 2;
+message SelectField {
+    Option option = 1;
+    SelectType type = 2;
     repeated Option options = 3;
+    string error = 4;
 }
 
-message Slider {
+enum SelectType {
+    SELECT_TYPE_UNSPECIFIED = 0;
+    SIMPLE = 1;
+    MULTI = 2;
+}
+
+message NumericField {
     int64 value = 1;
-    int64 min = 2;
-    int64 max = 3;
-    int64 step = 4;
+    int64 step = 2;
+    int64 min = 10;
+    string min_error = 20;
+    int64 max = 11;
+    string max_error = 21;
 }
 
 message Option {
@@ -103,29 +113,15 @@ message Option {
     string value = 2;
 }
 
-message MinLength {
-    int64 value = 1;
-    string error = 2;
-}
-
-message MaxLength {
-    int64 value = 1;
-    string error = 2;
-}
-
-message Regex {
-    string value = 1;
-    string error = 2;
-}
-
 message Button {
     string label = 1;
-    STATUS status = 2;
-    BUTTON_FUNC button_func = 3;
+    Status status = 2;
+    ButtonFuncType type = 3;
 }
 
-enum BUTTON_FUNC {
-    VALIDATE = 0;
-    RESET = 1;
-    SEND = 2;
+enum ButtonFuncType {
+    BUTTON_FUNC_UNSPECIFIED = 0;
+    VALIDATE = 1;
+    RESET = 2;
+    SEND = 3;
 }
