@@ -250,6 +250,15 @@ func checkValidatorOnSelectField(selectField *SelectField, validator *Validator)
 			return true
 		}
 	}
+	if v := validator.GetNumberIsEqual(); v != 0 && selectField.GetIndex() == v {
+		return true
+	}
+	if v := validator.GetNumberSmallerThan(); v != 0 && selectField.GetIndex() < v {
+		return true
+	}
+	if v := validator.GetNumberGreaterThan(); v != 0 && selectField.GetIndex() > v {
+		return true
+	}
 	if regex := validator.GetMatchRegexPattern(); regex != "" {
 		if ok, err := regexp.MatchString(regex, getOption(selectField.GetIndex(),
 			selectField.GetOptions()).GetValue()); ok && err != nil {
