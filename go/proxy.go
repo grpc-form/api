@@ -2,7 +2,6 @@ package grpcform
 
 import (
 	"context"
-	"log"
 	"net"
 	"regexp"
 	"strconv"
@@ -96,20 +95,14 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (*Form, error) 
 			if int64(len(outTextField.GetValue())) < outTextField.GetMin() {
 				outField.Error = outTextField.GetMinError()
 				out.Valid = false
-				return out, nil
 			}
 			if int64(len(outTextField.GetValue())) > outTextField.GetMax() {
 				outField.Error = outTextField.GetMaxError()
 				out.Valid = false
-				return out, nil
 			}
-			log.Printf("Regex: Pattern: %v, Value: %v\n", outTextField.GetRegex(), outTextField.GetValue())
-			log.Println(regexp.MatchString(outTextField.GetRegex(), outTextField.GetValue()))
 			if ok, err := regexp.MatchString(outTextField.GetRegex(), outTextField.GetValue()); !ok || err != nil {
-				log.Println("Regex: NOT OK:", err)
 				outField.Error = outTextField.GetRegexError()
 				out.Valid = false
-				return out, nil
 			}
 		}
 		if inSelectField := inField.GetSelectField(); hasStatus(outField.GetStatus(), FieldStatus_FIELD_STATUS_ACTIVE, FieldStatus_FIELD_STATUS_REQUIRED) && inSelectField != nil {
@@ -127,7 +120,6 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (*Form, error) 
 			if !check {
 				outField.Error = outSelectField.GetError()
 				out.Valid = false
-				return out, nil
 			}
 		}
 		if inNumericField := inField.GetNumericField(); hasStatus(outField.GetStatus(), FieldStatus_FIELD_STATUS_ACTIVE, FieldStatus_FIELD_STATUS_REQUIRED) && inNumericField != nil {
@@ -140,12 +132,10 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (*Form, error) 
 			if int64(v) < outSlider.GetMin() {
 				outField.Error = outSlider.GetMinError()
 				out.Valid = false
-				return out, nil
 			}
 			if hasStatus(outField.GetStatus(), FieldStatus_FIELD_STATUS_ACTIVE, FieldStatus_FIELD_STATUS_REQUIRED) && int64(v) > outSlider.GetMax() {
 				outField.Error = outSlider.GetMaxError()
 				out.Valid = false
-				return out, nil
 			}
 		}
 	}
@@ -195,9 +185,7 @@ func validTextField(textField *TextField, validator *Validator) bool {
 		return false
 	}
 	if v := validator.GetRegex(); v != "" {
-		log.Println("Regex TextField", v, textField.GetValue())
 		if ok, err := regexp.MatchString(v, textField.GetValue()); !ok || err != nil {
-			log.Println("Regex NOT OK:", err)
 			return false
 		}
 	}
@@ -216,7 +204,6 @@ func validNumericField(numericField *NumericField, validator *Validator) bool {
 	}
 	if v := validator.GetRegex(); v != "" {
 		if ok, err := regexp.MatchString(v, strconv.Itoa(int(numericField.GetValue()))); !ok || err != nil {
-			log.Println("Regex: NOT OK:", err)
 			return false
 		}
 	}
@@ -231,9 +218,7 @@ func validSelectField(selectField *SelectField, validator *Validator) bool {
 		return false
 	}
 	if regex := validator.GetRegex(); regex != "" {
-		log.Println("Regex Select Field", regex, getOption(selectField.GetIndex(), selectField.GetOptions()).GetValue())
 		if ok, err := regexp.MatchString(regex, getOption(selectField.GetIndex(), selectField.GetOptions()).GetValue()); !ok || err != nil {
-			log.Println("Regex: NOT OK:", err)
 			return false
 		}
 	}
