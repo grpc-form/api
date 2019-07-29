@@ -356,10 +356,8 @@ export namespace TextField {
 }
 
 export class SelectField extends jspb.Message {
-  hasOption(): boolean;
-  clearOption(): void;
-  getOption(): Option | undefined;
-  setOption(value?: Option): void;
+  getIndex(): number;
+  setIndex(value: number): void;
 
   getType(): SelectTypeMap[keyof SelectTypeMap];
   setType(value: SelectTypeMap[keyof SelectTypeMap]): void;
@@ -384,10 +382,34 @@ export class SelectField extends jspb.Message {
 
 export namespace SelectField {
   export type AsObject = {
-    option?: Option.AsObject,
+    index: number,
     type: SelectTypeMap[keyof SelectTypeMap],
     optionsList: Array<Option.AsObject>,
     error: string,
+  }
+}
+
+export class Option extends jspb.Message {
+  getIndex(): number;
+  setIndex(value: number): void;
+
+  getValue(): string;
+  setValue(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Option.AsObject;
+  static toObject(includeInstance: boolean, msg: Option): Option.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Option, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Option;
+  static deserializeBinaryFromReader(message: Option, reader: jspb.BinaryReader): Option;
+}
+
+export namespace Option {
+  export type AsObject = {
+    index: number,
+    value: string,
   }
 }
 
@@ -428,30 +450,6 @@ export namespace NumericField {
     minError: string,
     max: number,
     maxError: string,
-  }
-}
-
-export class Option extends jspb.Message {
-  getIndex(): number;
-  setIndex(value: number): void;
-
-  getValue(): string;
-  setValue(value: string): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): Option.AsObject;
-  static toObject(includeInstance: boolean, msg: Option): Option.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: Option, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): Option;
-  static deserializeBinaryFromReader(message: Option, reader: jspb.BinaryReader): Option;
-}
-
-export namespace Option {
-  export type AsObject = {
-    index: number,
-    value: string,
   }
 }
 

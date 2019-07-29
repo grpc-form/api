@@ -87,10 +87,15 @@ message TextField {
 }
 
 message SelectField {
-    Option option = 1;
+    int64 index = 1;
     SelectType type = 2;
     repeated Option options = 3;
     string error = 4;
+}
+
+message Option {
+    int64 index = 1;
+    string value = 2;
 }
 
 enum SelectType {
@@ -106,11 +111,6 @@ message NumericField {
     string min_error = 20;
     int64 max = 11;
     string max_error = 21;
-}
-
-message Option {
-    int64 index = 1;
-    string value = 2;
 }
 
 message Button {

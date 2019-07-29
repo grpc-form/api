@@ -114,13 +114,13 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (*Form, error) 
 		}
 		if inSelectField := inField.GetSelectField(); hasStatus(outField.GetStatus(), FieldStatus_FIELD_STATUS_ACTIVE, FieldStatus_FIELD_STATUS_REQUIRED) && inSelectField != nil {
 			outSelectField := outField.GetSelectField()
-			outSelectField.Option = inSelectField.GetOption()
-			if outField.GetStatus() == FieldStatus_FIELD_STATUS_ACTIVE && outSelectField.GetOption().GetIndex() == 0 {
+			outSelectField.Index = inSelectField.GetIndex()
+			if outField.GetStatus() == FieldStatus_FIELD_STATUS_ACTIVE && outSelectField.GetIndex() == 0 {
 				continue
 			}
 			check := false
 			for _, o := range outSelectField.GetOptions() {
-				if o.GetIndex() == outSelectField.GetOption().GetIndex() {
+				if o.GetIndex() == outSelectField.GetIndex() {
 					check = true
 				}
 			}
@@ -195,8 +195,9 @@ func validTextField(textField *TextField, validator *Validator) bool {
 		return false
 	}
 	if v := validator.GetRegex(); v != "" {
+		log.Println("Regex TextField", v, textField.GetValue())
 		if ok, err := regexp.MatchString(v, textField.GetValue()); !ok || err != nil {
-			log.Println("Regex:", err)
+			log.Println("Regex NOT OK:", err)
 			return false
 		}
 	}
@@ -224,13 +225,14 @@ func validNumericField(numericField *NumericField, validator *Validator) bool {
 
 func validSelectField(selectField *SelectField, validator *Validator) bool {
 	if text := validator.GetEqualText(); text != "" {
-		if getOption(selectField.GetOption(), selectField.GetOptions()) != nil {
+		if getOption(selectField.GetIndex(), selectField.GetOptions()) != nil {
 			return false
 		}
 		return false
 	}
 	if regex := validator.GetRegex(); regex != "" {
-		if ok, err := regexp.MatchString(regex, selectField.GetOption().GetValue()); !ok || err != nil {
+		log.Println("Regex Select Field", regex, getOption(selectField.GetIndex(), selectField.GetOptions()).GetValue())
+		if ok, err := regexp.MatchString(regex, getOption(selectField.GetIndex(), selectField.GetOptions()).GetValue()); !ok || err != nil {
 			log.Println("Regex: NOT OK:", err)
 			return false
 		}
@@ -238,9 +240,9 @@ func validSelectField(selectField *SelectField, validator *Validator) bool {
 	return true
 }
 
-func getOption(option *Option, options []*Option) *Option {
+func getOption(option int64, options []*Option) *Option {
 	for _, o := range options {
-		if o.GetValue() == option.GetValue() {
+		if o.GetIndex() == option {
 			return o
 		}
 	}
