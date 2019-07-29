@@ -107,15 +107,18 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (
 			if int64(len(outTextField.GetValue())) < outTextField.GetMin() {
 				outField.Error = outTextField.GetMinError()
 				out.Valid = false
+				continue
 			}
 			if int64(len(outTextField.GetValue())) > outTextField.GetMax() {
 				outField.Error = outTextField.GetMaxError()
 				out.Valid = false
+				continue
 			}
 			if ok, err := regexp.MatchString(outTextField.GetRegex(),
 				outTextField.GetValue()); !ok || err != nil {
 				outField.Error = outTextField.GetRegexError()
 				out.Valid = false
+				continue
 			}
 		}
 		if inSelectField := inField.GetSelectField(); hasStatus(outField.GetStatus(),
@@ -131,11 +134,13 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (
 			for _, o := range outSelectField.GetOptions() {
 				if o.GetIndex() == outSelectField.GetIndex() {
 					check = true
+					continue
 				}
 			}
 			if !check {
 				outField.Error = outSelectField.GetError()
 				out.Valid = false
+				continue
 			}
 		}
 		if inNumericField := inField.GetNumericField(); hasStatus(outField.GetStatus(),
@@ -151,12 +156,14 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (
 			if int64(v) < outSlider.GetMin() {
 				outField.Error = outSlider.GetMinError()
 				out.Valid = false
+				continue
 			}
 			if hasStatus(outField.GetStatus(),
 				FieldStatus_FIELD_STATUS_ACTIVE, FieldStatus_FIELD_STATUS_REQUIRED) &&
 				int64(v) > outSlider.GetMax() {
 				outField.Error = outSlider.GetMaxError()
 				out.Valid = false
+				continue
 			}
 		}
 	}
