@@ -104,6 +104,12 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (
 					outTextField.Value == "") {
 				continue
 			}
+			if ok, err := regexp.MatchString(outTextField.GetRegex(),
+				outTextField.GetValue()); !ok || err != nil {
+				outField.Error = outTextField.GetRegexError()
+				out.Valid = false
+				continue
+			}
 			if int64(len(outTextField.GetValue())) < outTextField.GetMin() {
 				outField.Error = outTextField.GetMinError()
 				out.Valid = false
@@ -111,12 +117,6 @@ func (s ProxyServer) ValidateForm(ctx context.Context, in *Form) (
 			}
 			if int64(len(outTextField.GetValue())) > outTextField.GetMax() {
 				outField.Error = outTextField.GetMaxError()
-				out.Valid = false
-				continue
-			}
-			if ok, err := regexp.MatchString(outTextField.GetRegex(),
-				outTextField.GetValue()); !ok || err != nil {
-				outField.Error = outTextField.GetRegexError()
 				out.Valid = false
 				continue
 			}
