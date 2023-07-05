@@ -3,6 +3,6 @@ module github.com/grpc-form/api
 go 1.12
 
 require (
-	github.com/golang/protobuf v1.3.2
-	google.golang.org/grpc v1.22.1
+	github.com/golang/protobuf v1.5.2
+	google.golang.org/grpc v1.53.0
 )
